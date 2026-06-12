@@ -429,9 +429,222 @@ function Services() {
   )
 }
 
+// ─── CaseStudyModal ───────────────────────────────────────────────────────────
+function CaseStudyModal({ onClose }) {
+  const overlayRef = useRef(null)
+  const panelRef  = useRef(null)
+
+  useEffect(() => {
+    document.body.style.overflow = 'hidden'
+    gsap.fromTo(overlayRef.current, { opacity: 0 }, { opacity: 1, duration: 0.3, ease: 'power2.out' })
+    gsap.fromTo(panelRef.current,   { y: 48, opacity: 0 }, { y: 0, opacity: 1, duration: 0.45, ease: 'power3.out', delay: 0.06 })
+    return () => { document.body.style.overflow = '' }
+  }, [])
+
+  const close = () => {
+    gsap.to(panelRef.current,  { y: 32, opacity: 0, duration: 0.28, ease: 'power2.in' })
+    gsap.to(overlayRef.current, { opacity: 0, duration: 0.32, ease: 'power2.in', delay: 0.04, onComplete: onClose })
+  }
+
+  useEffect(() => {
+    const onKey = (e) => { if (e.key === 'Escape') close() }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [])
+
+  const buildItems = [
+    'Full responsive site — designed mobile-first because that\'s where plumbing searches happen',
+    'Dedicated service pages: emergency repairs, boiler servicing, bathroom installs, leak detection',
+    'Contact form that routes directly to their email inbox — no third-party booking tool needed',
+    'Trust signals: Gas Safe registration badge, customer review highlights, response-time promise',
+    'Animated hero, smooth scroll, sub-1s load time on mobile',
+    'Deployed on Vercel with a custom domain — indexed by Google within 24 hours',
+  ]
+
+  const stackItems = [
+    { label: 'Claude Code', note: 'wrote and iterated the entire build' },
+    { label: 'React + Vite', note: 'component-based frontend, fast HMR' },
+    { label: 'Tailwind CSS', note: 'utility-first styling, no design system overhead' },
+    { label: 'GSAP', note: 'scroll animations, hero entrance' },
+    { label: 'Vercel', note: 'CI/CD on push, edge network delivery' },
+  ]
+
+  return (
+    <div
+      ref={overlayRef}
+      onClick={(e) => { if (e.target === e.currentTarget) close() }}
+      className="fixed inset-0 z-[2000] overflow-y-auto"
+      style={{ background: 'rgba(8,12,20,0.88)', backdropFilter: 'blur(10px)' }}
+    >
+      <div ref={panelRef} className="max-w-3xl mx-auto px-6 py-16">
+
+        {/* Back button */}
+        <button
+          onClick={close}
+          className="flex items-center gap-2 font-mono text-xs text-muted hover:text-text transition-colors mb-12 group"
+        >
+          <ChevronRight size={13} className="rotate-180 group-hover:-translate-x-0.5 transition-transform" />
+          Back to portfolio
+        </button>
+
+        {/* Header */}
+        <div className="mb-12">
+          <p className="font-mono text-primary text-xs uppercase tracking-widest mb-3">Case Study · Client #1</p>
+          <h2 className="font-display font-extrabold text-4xl md:text-5xl text-text leading-tight mb-4">
+            FixIt Plumbers
+          </h2>
+          <p className="font-body text-text-2 text-lg leading-relaxed max-w-xl">
+            A local plumbing company in London with no website, no online presence, and no way for new customers to find them. This is what got built, how, and in how long.
+          </p>
+        </div>
+
+        {/* Pull-quote stat */}
+        <div className="relative rounded-2xl border border-accent/20 bg-surface p-8 mb-14 overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-accent/5 via-transparent to-primary/5 pointer-events-none" />
+          <p className="font-mono text-xs text-accent uppercase tracking-widest mb-3">The number that matters</p>
+          <p className="font-display font-extrabold text-5xl md:text-6xl text-text leading-none mb-4">
+            6 days.
+          </p>
+          <p className="font-display text-2xl text-text-2">Zero to live.</p>
+          <p className="font-body text-text-2 text-sm mt-4 max-w-md leading-relaxed">
+            From first conversation to a deployed, indexed, production website. No templates, no page builders — written from scratch and shipped.
+          </p>
+        </div>
+
+        {/* 01 — The Problem */}
+        <div className="mb-14">
+          <div className="flex items-center gap-4 mb-6">
+            <span className="font-mono text-primary text-xs">01</span>
+            <div className="flex-1 h-px bg-border" />
+            <span className="font-mono text-muted text-xs uppercase tracking-widest">The Problem</span>
+          </div>
+          <p className="font-body text-text-2 leading-relaxed mb-4">
+            FixIt had been running for years entirely on word-of-mouth and a basic Google Business listing — name, phone number, a handful of reviews. That was it.
+          </p>
+          <p className="font-body text-text-2 leading-relaxed mb-4">
+            No website meant no way to show what services they actually offered. No way to display pricing context. No way to build trust before a customer picked up the phone. Every new job was a cold call to a stranger who found a number on Google.
+          </p>
+          <p className="font-body text-text-2 leading-relaxed">
+            Competitors with even basic websites were getting chosen first. Not because they were better — just because they showed up as more credible online.
+          </p>
+        </div>
+
+        {/* Before / After */}
+        <div className="grid md:grid-cols-2 gap-4 mb-14">
+          {/* Before */}
+          <div className="rounded-xl border border-border bg-bg p-5">
+            <p className="font-mono text-xs text-muted uppercase tracking-widest mb-4">Before</p>
+            <div className="rounded-lg border border-border/60 bg-surface p-4">
+              <div className="flex items-start gap-3 mb-3">
+                <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
+                  <Globe size={14} className="text-primary/50" />
+                </div>
+                <div>
+                  <p className="font-display font-semibold text-text text-sm">FixIt Plumbers</p>
+                  <p className="font-mono text-[10px] text-muted mt-0.5">Google Business Profile</p>
+                </div>
+              </div>
+              <div className="flex gap-1 mb-2">
+                {[...Array(5)].map((_, i) => (
+                  <span key={i} className="text-yellow-400 text-xs">★</span>
+                ))}
+                <span className="font-mono text-[10px] text-muted ml-1">12 reviews</span>
+              </div>
+              <p className="font-mono text-xs text-muted">📞 07700 900 123</p>
+              <p className="font-mono text-xs text-muted mt-1">📍 Bermondsey, London</p>
+              <div className="mt-3 pt-3 border-t border-border/40">
+                <p className="font-mono text-[10px] text-muted/60 italic">No website · No service info · No booking</p>
+              </div>
+            </div>
+          </div>
+          {/* After */}
+          <div className="rounded-xl border border-accent/20 bg-bg overflow-hidden">
+            <p className="font-mono text-xs text-accent uppercase tracking-widest p-5 pb-3">After</p>
+            <div className="relative h-44 overflow-hidden">
+              <img
+                src="https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?w=600&q=80"
+                alt="FixIt Plumbers live website"
+                className="w-full h-full object-cover opacity-75"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-bg/80 to-transparent" />
+              <div className="absolute bottom-3 left-4 flex gap-2">
+                <span className="font-mono text-[10px] text-accent bg-bg/80 border border-accent/30 rounded-full px-2 py-0.5">Live</span>
+                <span className="font-mono text-[10px] text-text-2 bg-bg/80 border border-border rounded-full px-2 py-0.5">fixit-plumbers.vercel.app</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* 02 — The Build */}
+        <div className="mb-14">
+          <div className="flex items-center gap-4 mb-6">
+            <span className="font-mono text-primary text-xs">02</span>
+            <div className="flex-1 h-px bg-border" />
+            <span className="font-mono text-muted text-xs uppercase tracking-widest">The Build</span>
+          </div>
+          <p className="font-body text-text-2 leading-relaxed mb-6">
+            Not a template. Not a Wix site. A custom-built React application written specifically for their business, their services, and their customers.
+          </p>
+          <ul className="space-y-3">
+            {buildItems.map((item, i) => (
+              <li key={i} className="flex items-start gap-3">
+                <span className="font-mono text-accent text-xs mt-1 flex-shrink-0">→</span>
+                <span className="font-body text-text-2 text-sm leading-relaxed">{item}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* 03 — The Approach */}
+        <div className="mb-14">
+          <div className="flex items-center gap-4 mb-6">
+            <span className="font-mono text-primary text-xs">03</span>
+            <div className="flex-1 h-px bg-border" />
+            <span className="font-mono text-muted text-xs uppercase tracking-widest">The Approach</span>
+          </div>
+          <p className="font-body text-text-2 leading-relaxed mb-6">
+            The whole build ran through Claude Code — I described what I needed, iterated on the output, and pushed when it was right. That's how a solo 18-year-old ships a production site in under a week.
+          </p>
+          <p className="font-body text-text-2 leading-relaxed mb-8">
+            No agency overhead. No project manager handoffs. One person, clear requirements, the right tools. The client got daily progress updates, saw the site take shape in real time, and signed off on a live URL six days after we started.
+          </p>
+          <div className="rounded-xl bg-surface border border-border overflow-hidden">
+            {stackItems.map((s, i) => (
+              <div key={i} className={`flex items-center justify-between px-5 py-3.5 ${i < stackItems.length - 1 ? 'border-b border-border' : ''}`}>
+                <span className="font-mono text-sm text-accent">{s.label}</span>
+                <span className="font-body text-text-2 text-xs text-right max-w-[55%]">{s.note}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Footer actions */}
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 pt-8 border-t border-border">
+          <a
+            href="https://fixit-plumbers.vercel.app"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-primary inline-flex items-center gap-2"
+          >
+            View live site <ExternalLink size={13} />
+          </a>
+          <button
+            onClick={close}
+            className="font-mono text-xs text-muted hover:text-text transition-colors"
+          >
+            ← Back to portfolio
+          </button>
+        </div>
+
+      </div>
+    </div>
+  )
+}
+
 // ─── Portfolio ────────────────────────────────────────────────────────────────
 function Portfolio() {
   const ref = useRef(null)
+  const [caseStudyOpen, setCaseStudyOpen] = useState(false)
 
   useEffect(() => {
     gsap.fromTo(
@@ -445,86 +658,96 @@ function Portfolio() {
   }, [])
 
   return (
-    <section id="portfolio" ref={ref} className="py-28 bg-surface">
-      <div className="max-w-6xl mx-auto px-6">
-        <div className="mb-16">
-          <div className="flex items-center gap-3 mb-5">
-            <div className="w-8 h-px bg-primary" />
-            <span className="font-mono text-primary text-xs uppercase tracking-widest">Work</span>
+    <>
+      {caseStudyOpen && <CaseStudyModal onClose={() => setCaseStudyOpen(false)} />}
+      <section id="portfolio" ref={ref} className="py-28 bg-surface">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="mb-16">
+            <div className="flex items-center gap-3 mb-5">
+              <div className="w-8 h-px bg-primary" />
+              <span className="font-mono text-primary text-xs uppercase tracking-widest">Work</span>
+            </div>
+            <h2 className="font-display font-extrabold text-4xl md:text-5xl text-text mb-4 leading-tight">
+              First Client <span className="text-gradient">Out the Door</span>
+            </h2>
+            <p className="font-body text-text-2 text-lg max-w-lg">
+              One live project so far. More in the pipeline. This is what Delvox actually ships.
+            </p>
           </div>
-          <h2 className="font-display font-extrabold text-4xl md:text-5xl text-text mb-4 leading-tight">
-            First Client <span className="text-gradient">Out the Door</span>
-          </h2>
-          <p className="font-body text-text-2 text-lg max-w-lg">
-            One live project so far. More in the pipeline. This is what Delvox actually ships.
-          </p>
-        </div>
 
-        <div className="grid md:grid-cols-2 gap-8">
-          <div className="port-card card-hover rounded-2xl overflow-hidden bg-bg group">
-            <div className="relative h-52 overflow-hidden">
-              <img
-                src="https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?w=800&q=80"
-                alt="FixIt Plumbers website"
-                className="w-full h-full object-cover opacity-60 group-hover:opacity-80 group-hover:scale-105 transition-all duration-500"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-bg/95 via-bg/30 to-transparent" />
-              <div className="absolute bottom-4 left-5 flex gap-2">
-                {['React', 'Vite', 'Tailwind'].map((t) => (
-                  <span key={t} className="font-mono text-xs text-accent bg-bg/80 border border-accent/30 rounded-full px-2.5 py-0.5">
-                    {t}
-                  </span>
-                ))}
+          <div className="grid md:grid-cols-2 gap-8">
+            <div className="port-card card-hover rounded-2xl overflow-hidden bg-bg group cursor-pointer" onClick={() => setCaseStudyOpen(true)}>
+              <div className="relative h-52 overflow-hidden">
+                <img
+                  src="https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?w=800&q=80"
+                  alt="FixIt Plumbers website"
+                  className="w-full h-full object-cover opacity-60 group-hover:opacity-80 group-hover:scale-105 transition-all duration-500"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-bg/95 via-bg/30 to-transparent" />
+                <div className="absolute bottom-4 left-5 flex gap-2">
+                  {['React', 'Vite', 'Tailwind'].map((t) => (
+                    <span key={t} className="font-mono text-xs text-accent bg-bg/80 border border-accent/30 rounded-full px-2.5 py-0.5">
+                      {t}
+                    </span>
+                  ))}
+                </div>
+              </div>
+              <div className="p-6">
+                <div className="flex items-start justify-between mb-3">
+                  <div>
+                    <h3 className="font-display font-bold text-xl text-text">FixIt Plumbers</h3>
+                    <p className="font-mono text-xs text-muted mt-1">Local Plumbing Company · Client #1</p>
+                  </div>
+                  <a
+                    href="https://fixit-plumbers.vercel.app"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={(e) => e.stopPropagation()}
+                    className="w-9 h-9 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center text-primary hover:bg-primary/20 transition-colors flex-shrink-0"
+                    title="View live site"
+                  >
+                    <ExternalLink size={14} />
+                  </a>
+                </div>
+                <p className="font-body text-text-2 text-sm leading-relaxed mb-4">
+                  My first client. A complete website for a local plumbing company — animated hero, mobile-first layout, contact form that routes straight to their inbox. Went from zero to live in 6 days.
+                </p>
+                <button
+                  onClick={(e) => { e.stopPropagation(); setCaseStudyOpen(true) }}
+                  className="inline-flex items-center gap-1.5 font-mono text-xs text-accent hover:text-text transition-colors group/link"
+                >
+                  View case study <ChevronRight size={12} className="group-hover/link:translate-x-0.5 transition-transform" />
+                </button>
               </div>
             </div>
-            <div className="p-6">
-              <div className="flex items-start justify-between mb-3">
-                <div>
-                  <h3 className="font-display font-bold text-xl text-text">FixIt Plumbers</h3>
-                  <p className="font-mono text-xs text-muted mt-1">Local Plumbing Company · Client #1</p>
+
+            <div className="port-card card-hover rounded-2xl overflow-hidden bg-bg group">
+              <div className="h-52 flex items-center justify-center bg-gradient-to-br from-surface to-bg border border-dashed border-border/50">
+                <div className="text-center">
+                  <div className="w-14 h-14 rounded-2xl bg-primary/5 border border-primary/20 flex items-center justify-center mx-auto mb-3">
+                    <Code2 size={22} className="text-primary/40" />
+                  </div>
+                  <p className="font-mono text-xs text-muted uppercase tracking-widest">Slot #2</p>
+                  <p className="font-body text-text-2 text-sm mt-1.5">Open</p>
                 </div>
+              </div>
+              <div className="p-6">
+                <h3 className="font-display font-bold text-xl text-text mb-2">Your Business Here</h3>
+                <p className="font-body text-text-2 text-sm leading-relaxed">
+                  I take on one or two projects at a time so nothing gets rushed. If you're interested, reach out early — slots fill up fast when you charge honest prices.
+                </p>
                 <a
-                  href="http://localhost:5173"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-9 h-9 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center text-primary hover:bg-primary/20 transition-colors flex-shrink-0"
-                  title="View project"
+                  href="mailto:madhavs.work07@gmail.com"
+                  className="inline-flex items-center gap-1.5 text-primary text-sm font-medium mt-4 hover:text-accent transition-colors duration-200"
                 >
-                  <ExternalLink size={14} />
+                  Get in touch <ArrowRight size={14} />
                 </a>
               </div>
-              <p className="font-body text-text-2 text-sm leading-relaxed">
-                My first client. A complete website for a local plumbing company — animated hero, mobile-first layout, contact form that routes straight to their inbox. Went from zero to live in 6 days.
-              </p>
-            </div>
-          </div>
-
-          <div className="port-card card-hover rounded-2xl overflow-hidden bg-bg group">
-            <div className="h-52 flex items-center justify-center bg-gradient-to-br from-surface to-bg border border-dashed border-border/50">
-              <div className="text-center">
-                <div className="w-14 h-14 rounded-2xl bg-primary/5 border border-primary/20 flex items-center justify-center mx-auto mb-3">
-                  <Code2 size={22} className="text-primary/40" />
-                </div>
-                <p className="font-mono text-xs text-muted uppercase tracking-widest">Slot #2</p>
-                <p className="font-body text-text-2 text-sm mt-1.5">Open</p>
-              </div>
-            </div>
-            <div className="p-6">
-              <h3 className="font-display font-bold text-xl text-text mb-2">Your Business Here</h3>
-              <p className="font-body text-text-2 text-sm leading-relaxed">
-                I take on one or two projects at a time so nothing gets rushed. If you're interested, reach out early — slots fill up fast when you charge honest prices.
-              </p>
-              <a
-                href="mailto:madhavs.work07@gmail.com"
-                className="inline-flex items-center gap-1.5 text-primary text-sm font-medium mt-4 hover:text-accent transition-colors duration-200"
-              >
-                Get in touch <ArrowRight size={14} />
-              </a>
             </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </>
   )
 }
 
