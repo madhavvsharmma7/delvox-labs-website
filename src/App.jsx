@@ -567,10 +567,10 @@ function About() {
               <em className="font-serif not-italic text-gradient">Built This</em>
             </h2>
             <p className="about-el font-body text-text-2 text-base leading-relaxed mb-5">
-              I'm Madhav. I started Delvox Labs at 18 because I wanted to build real things that solve real problems — and small businesses kept coming up as the obvious place to do that. Most of them are running on a website that hasn't changed since 2015, a Google Form, and someone manually forwarding emails.
+              I'm Madhav. I started Delvox Labs at 18 because I wanted to build real things that solve real problems, and small businesses kept coming up as the obvious place to do that. Most of them are running on a website that hasn't changed since 2015, a Google Form, and someone manually forwarding emails.
             </p>
             <p className="about-el font-body text-text-2 text-base leading-relaxed mb-8">
-              My first client was a plumbing company. I built their whole site from scratch in under a week. That proved the model: fast builds, real tooling, honest pricing. I'm doing this in public — sharing every project, every lesson, every misstep — because I think the best way to grow is to just ship things and talk about it.
+              My first client was a plumbing company. I built their whole site from scratch in under a week. That proved the model: fast builds, real tooling, honest pricing. I'm doing this in public, sharing every project, every lesson, every misstep, because I think the best way to grow is to just ship things and talk about it.
             </p>
             <div className="about-el flex flex-wrap gap-2.5">
               {['Building in Public', 'Solo Founder', 'AI-First', 'Ships Fast'].map((tag) => (
