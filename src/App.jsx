@@ -5,7 +5,7 @@ import {
   Globe, Zap, Bot, ArrowRight, Mail,
   Code2, ExternalLink, Menu, X,
   ChevronRight, Clock, Send, MessageSquare,
-  Check,
+  Check, Phone,
 } from 'lucide-react'
 
 const GithubIcon = () => (
@@ -17,6 +17,14 @@ const GithubIcon = () => (
 const XIcon = () => (
   <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
     <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+  </svg>
+)
+
+const LinkedinIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+    <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
+    <rect x="2" y="9" width="4" height="12"/>
+    <circle cx="4" cy="4" r="2"/>
   </svg>
 )
 
@@ -1021,9 +1029,42 @@ function Contact() {
   const inputClass =
     'w-full bg-bg border border-border rounded-xl px-4 py-3 text-text placeholder-muted font-body text-sm transition-colors duration-200'
 
+  const connectLinks = [
+    {
+      icon: <Mail size={15} />,
+      label: 'Email',
+      value: 'madhavs.work07@gmail.com',
+      href: 'mailto:madhavs.work07@gmail.com',
+    },
+    {
+      icon: <LinkedinIcon />,
+      label: 'LinkedIn',
+      value: null,
+      href: null,
+    },
+    {
+      icon: <GithubIcon />,
+      label: 'GitHub',
+      value: 'madhavvsharmma7',
+      href: 'https://github.com/madhavvsharmma7',
+    },
+    {
+      icon: <XIcon />,
+      label: 'X',
+      value: '@madhavvsharmma',
+      href: 'https://x.com/madhavvsharmma',
+    },
+    {
+      icon: <Phone size={15} />,
+      label: 'Phone',
+      value: null,
+      href: null,
+    },
+  ]
+
   return (
     <section id="contact" ref={ref} className="py-28 bg-surface">
-      <div className="max-w-4xl mx-auto px-6">
+      <div className="max-w-6xl mx-auto px-6">
         <div className="text-center mb-14">
           <div className="flex items-center justify-center gap-3 mb-5">
             <div className="w-8 h-px bg-primary" />
@@ -1038,60 +1079,86 @@ function Contact() {
           </p>
         </div>
 
-        <div className="glass rounded-3xl p-8 md:p-12">
-          {status === 'sent' ? (
-            <div className="text-center py-14">
-              <div className="w-16 h-16 rounded-full bg-green-500/10 border border-green-500/30 flex items-center justify-center mx-auto mb-5">
-                <Check size={28} className="text-green-400" />
+        <div className="grid lg:grid-cols-3 gap-6 items-start">
+          {/* Form */}
+          <div className="lg:col-span-2 glass rounded-3xl p-8 md:p-10">
+            {status === 'sent' ? (
+              <div className="text-center py-14">
+                <div className="w-16 h-16 rounded-full bg-green-500/10 border border-green-500/30 flex items-center justify-center mx-auto mb-5">
+                  <Check size={28} className="text-green-400" />
+                </div>
+                <h3 className="font-display font-bold text-2xl text-text mb-2">Got it — thanks.</h3>
+                <p className="font-body text-text-2">I'll reply today or first thing tomorrow.</p>
               </div>
-              <h3 className="font-display font-bold text-2xl text-text mb-2">Got it — thanks.</h3>
-              <p className="font-body text-text-2">I'll reply today or first thing tomorrow.</p>
+            ) : (
+              <form onSubmit={submit} className="space-y-6">
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div>
+                    <label className="block font-mono text-xs text-muted uppercase tracking-wider mb-2">Your Name</label>
+                    <input type="text" required value={form.name} onChange={set('name')} placeholder="Jane Smith" className={inputClass} />
+                  </div>
+                  <div>
+                    <label className="block font-mono text-xs text-muted uppercase tracking-wider mb-2">Email</label>
+                    <input type="email" required value={form.email} onChange={set('email')} placeholder="you@company.com" className={inputClass} />
+                  </div>
+                </div>
+                <div>
+                  <label className="block font-mono text-xs text-muted uppercase tracking-wider mb-2">Business / Project</label>
+                  <input type="text" value={form.business} onChange={set('business')} placeholder="What kind of business do you run?" className={inputClass} />
+                </div>
+                <div>
+                  <label className="block font-mono text-xs text-muted uppercase tracking-wider mb-2">What do you need?</label>
+                  <textarea
+                    required
+                    rows={5}
+                    value={form.message}
+                    onChange={set('message')}
+                    placeholder="Describe the problem you're trying to solve. The messier the better — I can figure out the solution."
+                    className={`${inputClass} resize-none`}
+                  />
+                </div>
+                <div className="flex justify-end pt-2">
+                  <button
+                    type="submit"
+                    disabled={status === 'sending'}
+                    className="btn-primary relative inline-flex items-center gap-2 text-white font-semibold px-8 py-3.5 rounded-xl z-10 disabled:opacity-60 w-full sm:w-auto justify-center"
+                  >
+                    <span className="relative z-10">
+                      {status === 'sending' ? 'Sending…' : 'Send Message'}
+                    </span>
+                    <Send size={15} className="relative z-10" />
+                  </button>
+                </div>
+              </form>
+            )}
+          </div>
+
+          {/* Connect */}
+          <div className="glass rounded-3xl p-8">
+            <p className="font-mono text-xs text-primary uppercase tracking-widest mb-6">Connect</p>
+            <div className="space-y-1">
+              {connectLinks.map(({ icon, label, value, href }) => {
+                const inner = (
+                  <div className={`flex items-center gap-3.5 px-4 py-3.5 rounded-xl transition-colors duration-200 ${href ? 'hover:bg-white/5 cursor-pointer' : 'opacity-40 cursor-default'}`}>
+                    <span className="text-primary flex-shrink-0 w-4 flex items-center justify-center">{icon}</span>
+                    <div className="min-w-0">
+                      <p className="font-mono text-[10px] text-muted uppercase tracking-widest leading-none mb-1">{label}</p>
+                      <p className="font-body text-sm text-text truncate">
+                        {value ?? <span className="text-muted italic text-xs">— add later</span>}
+                      </p>
+                    </div>
+                  </div>
+                )
+                return href ? (
+                  <a key={label} href={href} target={href.startsWith('mailto') ? undefined : '_blank'} rel="noopener noreferrer">
+                    {inner}
+                  </a>
+                ) : (
+                  <div key={label}>{inner}</div>
+                )
+              })}
             </div>
-          ) : (
-            <form onSubmit={submit} className="space-y-6">
-              <div className="grid md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block font-mono text-xs text-muted uppercase tracking-wider mb-2">Your Name</label>
-                  <input type="text" required value={form.name} onChange={set('name')} placeholder="Jane Smith" className={inputClass} />
-                </div>
-                <div>
-                  <label className="block font-mono text-xs text-muted uppercase tracking-wider mb-2">Email</label>
-                  <input type="email" required value={form.email} onChange={set('email')} placeholder="you@company.com" className={inputClass} />
-                </div>
-              </div>
-              <div>
-                <label className="block font-mono text-xs text-muted uppercase tracking-wider mb-2">Business / Project</label>
-                <input type="text" value={form.business} onChange={set('business')} placeholder="What kind of business do you run?" className={inputClass} />
-              </div>
-              <div>
-                <label className="block font-mono text-xs text-muted uppercase tracking-wider mb-2">What do you need?</label>
-                <textarea
-                  required
-                  rows={5}
-                  value={form.message}
-                  onChange={set('message')}
-                  placeholder="Describe the problem you're trying to solve. The messier the better — I can figure out the solution."
-                  className={`${inputClass} resize-none`}
-                />
-              </div>
-              <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-2">
-                <div className="flex items-center gap-2.5 text-text-2 text-sm">
-                  <Mail size={16} className="text-primary flex-shrink-0" />
-                  <span className="font-body">madhavs.work07@gmail.com</span>
-                </div>
-                <button
-                  type="submit"
-                  disabled={status === 'sending'}
-                  className="btn-primary relative inline-flex items-center gap-2 text-white font-semibold px-8 py-3.5 rounded-xl z-10 disabled:opacity-60 w-full sm:w-auto justify-center"
-                >
-                  <span className="relative z-10">
-                    {status === 'sending' ? 'Sending…' : 'Send Message'}
-                  </span>
-                  <Send size={15} className="relative z-10" />
-                </button>
-              </div>
-            </form>
-          )}
+          </div>
         </div>
       </div>
     </section>
