@@ -1,0 +1,53 @@
+<svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+
+  <!--
+    CONCEPT 1 — "Block D"
+    Clean geometric D letterform with a counter (inner arch),
+    neon blue cursor underline, and a subtle cyan glow ring.
+    Most legible at favicon / small sizes.
+  -->
+
+  <!-- Dark rounded-square background -->
+  <rect width="200" height="200" rx="44" fill="#080C14"/>
+
+  <!-- Subtle blue glow behind the D -->
+  <ellipse cx="100" cy="100" rx="62" ry="62" fill="#2563EB" opacity="0.08"/>
+
+  <!--
+    D letterform — white, fill-rule evenodd cuts the counter.
+
+    Outer path:
+      Bar  : x 56–78, y 40–160  (22 px wide, 120 px tall)
+      Arc  : from (78, 40) → clockwise → (78, 160), r = 60
+             center (78, 100), rightmost x = 138
+
+    Inner counter (the arch/hole inside the D):
+      Arc  : from (78, 62) → clockwise → (78, 138), r = 38
+             center (78, 100), rightmost x = 116
+      Close: straight line up at x = 78
+
+    Consistent stroke weight throughout: 22 px (bar) = 22 px (caps) = 22 px (right wall)
+  -->
+  <path
+    fill-rule="evenodd"
+    fill="#F8FAFC"
+    d="
+      M 56 40
+      L 78 40
+      A 60 60 0 0 1 78 160
+      L 56 160
+      Z
+
+      M 78 62
+      A 38 38 0 0 1 78 138
+      Z
+    "
+  />
+
+  <!-- Neon blue cursor underline -->
+  <rect x="56" y="170" width="46" height="8" rx="4" fill="#2563EB"/>
+
+  <!-- Thin cyan accent line — mimics a terminal scan line -->
+  <line x1="56" y1="178" x2="102" y2="178" stroke="#38BDF8" stroke-width="1" opacity="0.4"/>
+
+</svg>
