@@ -1013,10 +1013,22 @@ function Contact() {
 
   const set = useCallback((key) => (e) => setForm((f) => ({ ...f, [key]: e.target.value })), [])
 
-  const submit = (e) => {
+  // ← Paste your Formspree endpoint here once you have it
+  const FORMSPREE_URL = 'https://formspree.io/f/YOUR_FORM_ID'
+
+  const submit = async (e) => {
     e.preventDefault()
     setStatus('sending')
-    setTimeout(() => setStatus('sent'), 1500)
+    try {
+      const res = await fetch(FORMSPREE_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify(form),
+      })
+      setStatus(res.ok ? 'sent' : 'error')
+    } catch {
+      setStatus('error')
+    }
   }
 
   const inputClass =
@@ -1070,6 +1082,26 @@ function Contact() {
                 </div>
                 <h3 className="font-display font-bold text-2xl text-text mb-2">Got it — thanks.</h3>
                 <p className="font-body text-text-2">I'll reply today or first thing tomorrow.</p>
+              </div>
+            ) : status === 'error' ? (
+              <div className="text-center py-14">
+                <div className="w-16 h-16 rounded-full bg-red-500/10 border border-red-500/30 flex items-center justify-center mx-auto mb-5">
+                  <Mail size={24} className="text-red-400" />
+                </div>
+                <h3 className="font-display font-bold text-2xl text-text mb-2">Something went wrong.</h3>
+                <p className="font-body text-text-2 mb-5">The form couldn't send. Email me directly instead.</p>
+                <a
+                  href="mailto:madhavs.work07@gmail.com"
+                  className="inline-flex items-center gap-2 text-primary font-medium hover:text-accent transition-colors"
+                >
+                  madhavs.work07@gmail.com <ArrowRight size={14} />
+                </a>
+                <button
+                  onClick={() => setStatus('idle')}
+                  className="block mx-auto mt-4 font-mono text-xs text-muted hover:text-text transition-colors"
+                >
+                  ← Try again
+                </button>
               </div>
             ) : (
               <form onSubmit={submit} className="space-y-6">
