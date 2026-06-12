@@ -1014,7 +1014,7 @@ function Contact() {
   const set = useCallback((key) => (e) => setForm((f) => ({ ...f, [key]: e.target.value })), [])
 
   // ← Paste your Formspree endpoint here once you have it
-  const FORMSPREE_URL = 'https://formspree.io/f/YOUR_FORM_ID'
+  const FORMSPREE_URL = 'https://formspree.io/f/mgobnbrg'
 
   const submit = async (e) => {
     e.preventDefault()
