@@ -3,7 +3,7 @@ import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import {
   Globe, Zap, Bot, ArrowRight, Mail,
-  Code2, Terminal, ExternalLink, Menu, X,
+  Code2, ExternalLink, Menu, X,
   ChevronRight, Clock, Send, MessageSquare,
   Check,
 } from 'lucide-react'
@@ -87,6 +87,25 @@ function CodeRain() {
   )
 }
 
+// ─── LogoMark ─────────────────────────────────────────────────────────────────
+function LogoMark({ size = 28, uid = 'a' }) {
+  const gid = `cg-${uid}`
+  return (
+    <svg width={size} height={size} viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <rect width="200" height="200" rx="44" fill="#080C14"/>
+      <defs>
+        <linearGradient id={gid} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#38BDF8"/>
+          <stop offset="100%" stopColor="#2563EB"/>
+        </linearGradient>
+      </defs>
+      <polyline points="38,52 82,100 38,148" fill="none" stroke={`url(#${gid})`} strokeWidth="15" strokeLinejoin="miter" strokeLinecap="round"/>
+      <path fillRule="evenodd" fill="#F8FAFC" d="M 100 52 L 118 52 A 48 48 0 0 1 118 148 L 100 148 Z M 118 70 A 30 30 0 0 1 118 130 Z"/>
+      <rect x="168" y="128" width="18" height="7" rx="3.5" fill="#38BDF8"/>
+    </svg>
+  )
+}
+
 // ─── Navbar ───────────────────────────────────────────────────────────────────
 function Navbar() {
   const [scrolled, setScrolled] = useState(false)
@@ -115,9 +134,7 @@ function Navbar() {
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
           className="flex items-center gap-2.5"
         >
-          <div className="w-7 h-7 rounded-lg bg-primary flex items-center justify-center flex-shrink-0">
-            <Terminal size={13} className="text-white" />
-          </div>
+          <LogoMark size={28} uid="nav" />
           <span className="font-display font-bold text-text text-lg tracking-tight">
             Delvox <span className="text-gradient">Labs</span>
           </span>
@@ -818,9 +835,7 @@ function Footer() {
       <div className="max-w-6xl mx-auto px-6">
         <div className="flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="flex items-center gap-2.5">
-            <div className="w-6 h-6 rounded-md bg-primary flex items-center justify-center flex-shrink-0">
-              <Terminal size={12} className="text-white" />
-            </div>
+            <LogoMark size={24} uid="foot" />
             <span className="font-display font-bold text-text">
               Delvox <span className="text-gradient">Labs</span>
             </span>
