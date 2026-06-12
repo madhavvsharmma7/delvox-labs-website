@@ -25,6 +25,11 @@ html {
   color: var(--text);
 }
 
+/* Offset anchor sections so the fixed navbar doesn't cover the heading */
+section[id] {
+  scroll-margin-top: 5rem;
+}
+
 body {
   margin: 0;
   font-family: 'Inter', sans-serif;
