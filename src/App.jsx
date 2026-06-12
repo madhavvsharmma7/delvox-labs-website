@@ -201,7 +201,7 @@ function Navbar() {
         </nav>
 
         <a
-          href="mailto:madhavs.work07@gmail.com"
+          href="mailto:delvoxlabs@gmail.com"
           className="btn-primary relative hidden md:inline-flex items-center gap-2 text-white text-sm font-semibold px-5 py-2.5 rounded-xl z-10"
         >
           <span className="relative z-10">Start a Project</span>
@@ -230,7 +230,7 @@ function Navbar() {
               </button>
             ))}
             <a
-              href="mailto:madhavs.work07@gmail.com"
+              href="mailto:delvoxlabs@gmail.com"
               className="btn-primary relative text-center text-white text-sm font-semibold px-5 py-3 rounded-xl z-10 mt-1"
             >
               <span className="relative z-10">Start a Project</span>
@@ -306,7 +306,7 @@ function Hero() {
 
           <div ref={ctaRef} className="flex flex-wrap items-center gap-4">
             <a
-              href="mailto:madhavs.work07@gmail.com"
+              href="mailto:delvoxlabs@gmail.com"
               className="btn-primary relative group inline-flex items-center gap-2.5 text-white font-semibold px-7 py-4 rounded-xl text-base z-10"
             >
               <span className="relative z-10">Start a Project</span>
@@ -738,7 +738,7 @@ function Portfolio() {
                   I take on one or two projects at a time so nothing gets rushed. If you're interested, reach out early — slots fill up fast when you charge honest prices.
                 </p>
                 <a
-                  href="mailto:madhavs.work07@gmail.com"
+                  href="mailto:delvoxlabs@gmail.com"
                   className="inline-flex items-center gap-1.5 text-primary text-sm font-medium mt-4 hover:text-accent transition-colors duration-200"
                 >
                   Get in touch <ArrowRight size={14} />
@@ -1038,8 +1038,8 @@ function Contact() {
     {
       icon: <Mail size={15} />,
       label: 'Email',
-      value: 'madhavs.work07@gmail.com',
-      href: 'mailto:madhavs.work07@gmail.com',
+      value: 'delvoxlabs@gmail.com',
+      href: 'mailto:delvoxlabs@gmail.com',
     },
     {
       icon: <GithubIcon />,
@@ -1091,10 +1091,10 @@ function Contact() {
                 <h3 className="font-display font-bold text-2xl text-text mb-2">Something went wrong.</h3>
                 <p className="font-body text-text-2 mb-5">The form couldn't send. Email me directly instead.</p>
                 <a
-                  href="mailto:madhavs.work07@gmail.com"
+                  href="mailto:delvoxlabs@gmail.com"
                   className="inline-flex items-center gap-2 text-primary font-medium hover:text-accent transition-colors"
                 >
-                  madhavs.work07@gmail.com <ArrowRight size={14} />
+                  delvoxlabs@gmail.com <ArrowRight size={14} />
                 </a>
                 <button
                   onClick={() => setStatus('idle')}
@@ -1197,7 +1197,7 @@ function Footer() {
           </div>
 
           <div className="flex items-center gap-4">
-            <a href="mailto:madhavs.work07@gmail.com" aria-label="Email" className="text-muted hover:text-text transition-colors duration-200">
+            <a href="mailto:delvoxlabs@gmail.com" aria-label="Email" className="text-muted hover:text-text transition-colors duration-200">
               <Mail size={18} />
             </a>
             <a href="https://github.com/madhavvsharmma7" target="_blank" rel="noopener noreferrer" aria-label="GitHub" className="text-muted hover:text-text transition-colors duration-200">
