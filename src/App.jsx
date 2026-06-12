@@ -5,7 +5,7 @@ import {
   Globe, Zap, Bot, ArrowRight, Mail,
   Code2, Terminal, ExternalLink, Menu, X,
   ChevronRight, Clock, Send, MessageSquare,
-  Check, User,
+  Check,
 } from 'lucide-react'
 
 const GithubIcon = () => (
@@ -587,8 +587,8 @@ function About() {
               <div className="relative z-10">
                 {/* Avatar placeholder */}
                 <div className="flex items-center gap-4 mb-7">
-                  <div className="w-16 h-16 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center flex-shrink-0">
-                    <User size={28} className="text-primary/50" />
+                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary to-accent flex items-center justify-center flex-shrink-0 select-none">
+                    <span className="font-display font-extrabold text-white text-lg tracking-tight">MS</span>
                   </div>
                   <div>
                     <div className="font-display font-bold text-text text-lg">Madhav Sharma</div>
