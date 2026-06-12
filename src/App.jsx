@@ -5,7 +5,7 @@ import {
   Globe, Zap, Bot, ArrowRight, Mail,
   Code2, Terminal, ExternalLink, Menu, X,
   ChevronRight, Clock, Send, MessageSquare,
-  Cpu, Layers, Check,
+  Check, User,
 } from 'lucide-react'
 
 const GithubIcon = () => (
@@ -19,11 +19,12 @@ const XIcon = () => (
     <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
   </svg>
 )
+
 import './index.css'
 
 gsap.registerPlugin(ScrollTrigger)
 
-// ─── Signature Animation: Code Rain (Tech/SaaS theme) ───────────────────────
+// ─── Signature Animation: Code Rain ──────────────────────────────────────────
 function CodeRain() {
   const canvasRef = useRef(null)
 
@@ -44,42 +45,21 @@ function CodeRain() {
     const FONT_SIZE = 13
     let cols = Math.floor(canvas.width / FONT_SIZE)
     let drops = Array.from({ length: cols }, () => Math.random() * -50)
-
     let raf
-    const draw = () => {
-      ctx.fillStyle = 'rgba(8, 12, 20, 0.06)'
-      ctx.fillRect(0, 0, canvas.width, canvas.height)
-      ctx.font = `${FONT_SIZE}px "JetBrains Mono", monospace`
-
-      cols = Math.floor(canvas.width / FONT_SIZE)
-      while (drops.length < cols) drops.push(0)
-
-      drops.forEach((y, i) => {
-        const char = CHARS[Math.floor(Math.random() * CHARS.length)]
-        const progress = y / canvas.height
-        if (progress < 0.2) ctx.fillStyle = '#38BDF8'
-        else if (progress < 0.6) ctx.fillStyle = '#2563EB'
-        else ctx.fillStyle = 'rgba(37,99,235,0.25)'
-
-        ctx.fillText(char, i * FONT_SIZE, y)
-
-        if (y > canvas.height && Math.random() > 0.975) drops[i] = 0
-        drops[i] += FONT_SIZE * 0.65
-      })
-
-      raf = requestAnimationFrame(draw)
-    }
-
     let lastFrame = 0
-    const throttledDraw = (ts) => {
-      raf = requestAnimationFrame(throttledDraw)
+
+    const draw = (ts) => {
+      raf = requestAnimationFrame(draw)
       if (ts - lastFrame < 50) return
       lastFrame = ts
+
       ctx.fillStyle = 'rgba(8, 12, 20, 0.06)'
       ctx.fillRect(0, 0, canvas.width, canvas.height)
       ctx.font = `${FONT_SIZE}px "JetBrains Mono", monospace`
+
       cols = Math.floor(canvas.width / FONT_SIZE)
       while (drops.length < cols) drops.push(0)
+
       drops.forEach((y, i) => {
         const char = CHARS[Math.floor(Math.random() * CHARS.length)]
         const p = y / canvas.height
@@ -90,7 +70,7 @@ function CodeRain() {
       })
     }
 
-    raf = requestAnimationFrame(throttledDraw)
+    raf = requestAnimationFrame(draw)
 
     return () => {
       cancelAnimationFrame(raf)
@@ -107,7 +87,7 @@ function CodeRain() {
   )
 }
 
-// ─── Navbar ──────────────────────────────────────────────────────────────────
+// ─── Navbar ───────────────────────────────────────────────────────────────────
 function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
@@ -131,7 +111,6 @@ function Navbar() {
       }`}
     >
       <div className="max-w-6xl mx-auto px-6 flex items-center justify-between">
-        {/* Logo */}
         <button
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
           className="flex items-center gap-2.5"
@@ -144,7 +123,6 @@ function Navbar() {
           </span>
         </button>
 
-        {/* Desktop links */}
         <nav className="hidden md:flex items-center gap-7">
           {nav.map((n) => (
             <button
@@ -174,7 +152,6 @@ function Navbar() {
         </button>
       </div>
 
-      {/* Mobile drawer */}
       {open && (
         <div className="md:hidden glass border-t border-border">
           <div className="max-w-6xl mx-auto px-6 py-5 flex flex-col gap-4">
@@ -202,11 +179,11 @@ function Navbar() {
 
 // ─── Hero ─────────────────────────────────────────────────────────────────────
 function Hero() {
-  const badgeRef = useRef(null)
-  const h1Ref   = useRef(null)
-  const subRef  = useRef(null)
-  const ctaRef  = useRef(null)
-  const statsRef = useRef(null)
+  const badgeRef  = useRef(null)
+  const h1Ref     = useRef(null)
+  const subRef    = useRef(null)
+  const ctaRef    = useRef(null)
+  const statsRef  = useRef(null)
 
   useEffect(() => {
     const tl = gsap.timeline({ delay: 0.1 })
@@ -219,7 +196,6 @@ function Hero() {
 
   return (
     <section className="relative min-h-screen flex items-center grid-bg overflow-hidden">
-      {/* BG image + overlays */}
       <div className="absolute inset-0">
         <img
           src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=1920&q=80"
@@ -232,24 +208,20 @@ function Hero() {
         <div className="absolute inset-0 bg-gradient-to-r from-bg/70 via-transparent to-bg/70" />
       </div>
 
-      {/* Signature code rain */}
       <CodeRain />
 
-      {/* Glow orbs */}
       <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full bg-primary/8 blur-3xl pointer-events-none" />
       <div className="absolute top-1/2 right-1/4 w-64 h-64 rounded-full bg-accent/5 blur-2xl pointer-events-none" />
 
       <div className="relative z-10 max-w-6xl mx-auto px-6 pt-28 pb-24 w-full">
         <div className="max-w-3xl">
-          {/* Badge */}
           <div ref={badgeRef} className="inline-flex items-center gap-2 glass rounded-full px-4 py-1.5 mb-8">
             <div className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
             <span className="font-mono text-accent text-xs font-medium tracking-widest uppercase">
-              AI-Powered Development Studio
+              Solo dev · AI-first · Building in Public
             </span>
           </div>
 
-          {/* Headline */}
           <h1
             ref={h1Ref}
             className="font-display font-extrabold text-5xl md:text-[68px] leading-[1.04] tracking-tight text-text mb-6"
@@ -260,16 +232,13 @@ function Hero() {
             for Small Business
           </h1>
 
-          {/* Sub */}
           <p
             ref={subRef}
             className="font-body text-text-2 text-lg md:text-xl leading-relaxed mb-10 max-w-[520px]"
           >
-            Delvox Labs crafts AI-powered websites and automation systems that
-            turn small businesses into lean, 24/7 digital operations — built on Claude AI.
+            Websites, automation, and AI agents for small businesses — the kind of work that used to require a whole team. Built on Claude AI, shipped in days, not months.
           </p>
 
-          {/* CTA buttons */}
           <div ref={ctaRef} className="flex flex-wrap items-center gap-4">
             <a
               href="mailto:madhavs.work07@gmail.com"
@@ -285,20 +254,19 @@ function Hero() {
               onClick={() => document.getElementById('portfolio')?.scrollIntoView({ behavior: 'smooth' })}
               className="inline-flex items-center gap-2 text-text-2 hover:text-text font-medium text-base transition-colors duration-200"
             >
-              See Our Work <ChevronRight size={16} />
+              See the Work <ChevronRight size={16} />
             </button>
           </div>
         </div>
 
-        {/* Stats row */}
         <div
           ref={statsRef}
           className="mt-20 pt-8 border-t border-border/40 flex flex-wrap gap-10"
         >
           {[
-            { value: '7 Days',     label: 'Avg Delivery' },
-            { value: 'Claude AI',  label: 'Core Engine' },
-            { value: 'React + Py', label: 'Primary Stack' },
+            { value: 'FixIt Plumbers', label: 'First Client — Live' },
+            { value: 'Claude AI',      label: 'Core Engine' },
+            { value: 'Open',           label: 'Taking New Work' },
           ].map(({ value, label }) => (
             <div key={label}>
               <div className="font-display font-extrabold text-2xl text-text">{value}</div>
@@ -308,7 +276,6 @@ function Hero() {
         </div>
       </div>
 
-      {/* Scroll cue */}
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-muted pointer-events-none">
         <span className="font-mono text-xs uppercase tracking-widest">scroll</span>
         <div className="w-px h-8 bg-gradient-to-b from-muted/60 to-transparent" />
@@ -336,19 +303,19 @@ function Services() {
     {
       icon: <Globe size={22} />,
       title: 'AI-Powered Websites',
-      desc: 'Premium, conversion-optimised websites built with React and infused with AI — chatbots, smart forms, and personalisation baked in from day one.',
+      desc: 'Fast, modern React sites that actually convert — with AI baked in where it counts. Smart contact forms, instant visitor answers, and copy that doesn\'t read like a brochure.',
       tags: ['React', 'Claude AI', 'Tailwind'],
     },
     {
       icon: <Zap size={22} />,
       title: 'Business Automations',
-      desc: 'Eliminate repetitive work with custom automation pipelines. From lead follow-up to invoice generation — we automate the bottlenecks holding you back.',
+      desc: 'Python and n8n workflows that handle the tedious stuff — follow-ups, scheduling, form routing, notifications. The work that eats your day, automated in days.',
       tags: ['Python', 'n8n', 'APIs'],
     },
     {
       icon: <Bot size={22} />,
       title: 'AI Agents',
-      desc: 'Deploy intelligent AI agents that handle customer inquiries, qualify leads, and run workflows 24/7 — without you lifting a finger.',
+      desc: 'Claude AI agents built around how your business actually runs — not a generic chatbot dropped on a page. They answer questions, qualify leads, and handle intake while you\'re busy.',
       tags: ['Claude AI', 'LangChain', 'Voice'],
     },
   ]
@@ -358,14 +325,14 @@ function Services() {
       <div className="mb-16">
         <div className="flex items-center gap-3 mb-5">
           <div className="w-8 h-px bg-primary" />
-          <span className="font-mono text-primary text-xs uppercase tracking-widest">What We Build</span>
+          <span className="font-mono text-primary text-xs uppercase tracking-widest">What I Build</span>
         </div>
         <h2 className="font-display font-extrabold text-4xl md:text-5xl text-text mb-4 leading-tight">
-          Three Ways We{' '}
-          <span className="text-gradient">Upgrade</span> Your Business
+          Three Services.{' '}
+          <span className="text-gradient">No Retainers.</span>
         </h2>
         <p className="font-body text-text-2 text-lg max-w-lg">
-          Every service compounds — a website that learns, automations that scale, agents that grow.
+          Pick what your business needs right now. No upselling, no packages — just the thing that actually solves the problem.
         </p>
       </div>
 
@@ -419,18 +386,17 @@ function Portfolio() {
         <div className="mb-16">
           <div className="flex items-center gap-3 mb-5">
             <div className="w-8 h-px bg-primary" />
-            <span className="font-mono text-primary text-xs uppercase tracking-widest">Live Projects</span>
+            <span className="font-mono text-primary text-xs uppercase tracking-widest">Work</span>
           </div>
           <h2 className="font-display font-extrabold text-4xl md:text-5xl text-text mb-4 leading-tight">
-            Built &amp; <span className="text-gradient">Shipped</span>
+            First Client <span className="text-gradient">Out the Door</span>
           </h2>
           <p className="font-body text-text-2 text-lg max-w-lg">
-            Real projects for real businesses. Every line of code built to perform.
+            One live project so far. More in the pipeline. This is what Delvox actually ships.
           </p>
         </div>
 
         <div className="grid md:grid-cols-2 gap-8">
-          {/* FixIt Plumbers */}
           <div className="port-card card-hover rounded-2xl overflow-hidden bg-bg group">
             <div className="relative h-52 overflow-hidden">
               <img
@@ -451,7 +417,7 @@ function Portfolio() {
               <div className="flex items-start justify-between mb-3">
                 <div>
                   <h3 className="font-display font-bold text-xl text-text">FixIt Plumbers</h3>
-                  <p className="font-mono text-xs text-muted mt-1">Local Service Business</p>
+                  <p className="font-mono text-xs text-muted mt-1">Local Plumbing Company · Client #1</p>
                 </div>
                 <a
                   href="http://localhost:5173"
@@ -464,26 +430,25 @@ function Portfolio() {
                 </a>
               </div>
               <p className="font-body text-text-2 text-sm leading-relaxed">
-                Premium plumbing service website with animated sections, contact automation, and local SEO — built and deployed in under a week using the Delvox stack.
+                My first client. A complete website for a local plumbing company — animated hero, mobile-first layout, contact form that routes straight to their inbox. Went from zero to live in 6 days.
               </p>
             </div>
           </div>
 
-          {/* Coming soon */}
           <div className="port-card card-hover rounded-2xl overflow-hidden bg-bg group">
-            <div className="h-52 flex items-center justify-center border border-dashed border-border/50 m-0 bg-gradient-to-br from-surface to-bg">
+            <div className="h-52 flex items-center justify-center bg-gradient-to-br from-surface to-bg border border-dashed border-border/50">
               <div className="text-center">
                 <div className="w-14 h-14 rounded-2xl bg-primary/5 border border-primary/20 flex items-center justify-center mx-auto mb-3">
                   <Code2 size={22} className="text-primary/40" />
                 </div>
-                <p className="font-mono text-xs text-muted uppercase tracking-widest">Next Project</p>
-                <p className="font-body text-text-2 text-sm mt-1.5">Currently In Build</p>
+                <p className="font-mono text-xs text-muted uppercase tracking-widest">Slot #2</p>
+                <p className="font-body text-text-2 text-sm mt-1.5">Open</p>
               </div>
             </div>
             <div className="p-6">
               <h3 className="font-display font-bold text-xl text-text mb-2">Your Business Here</h3>
               <p className="font-body text-text-2 text-sm leading-relaxed">
-                We're taking on new clients. Let's build something that makes your competitors nervous — fast.
+                I take on one or two projects at a time so nothing gets rushed. If you're interested, reach out early — slots fill up fast when you charge honest prices.
               </p>
               <a
                 href="mailto:madhavs.work07@gmail.com"
@@ -517,17 +482,17 @@ function Process() {
   const STEPS = [
     {
       num: '01', icon: <MessageSquare size={20} />, title: 'Consult',
-      desc: "We start with a deep-dive into your business — goals, bottlenecks, current tools. No cookie-cutter proposals. Just honest strategy.",
+      desc: "We spend 30–60 minutes figuring out what you actually need — not what sounds impressive. I'll tell you honestly if AI is the right fit, or if the simpler thing is just a better website.",
       duration: '1–2 days',
     },
     {
       num: '02', icon: <Code2 size={20} />, title: 'Build',
-      desc: "We engineer your solution from scratch using modern, AI-first tooling. You get daily updates, GitHub access, and zero surprises.",
+      desc: "I build it. You get a staging link at each milestone. If something's off, we fix it before moving forward. All code lives on GitHub from day one — no black box.",
       duration: '3–10 days',
     },
     {
       num: '03', icon: <Globe size={20} />, title: 'Deploy',
-      desc: "We launch, test, and hand you the keys. Full documentation, live training, and ongoing support — we don't disappear post-delivery.",
+      desc: "We push it live together. I walk you through everything, document what I built, and stay reachable for two weeks after handoff. No disappearing act after the last invoice.",
       duration: '1–2 days',
     },
   ]
@@ -537,18 +502,17 @@ function Process() {
       <div className="mb-16">
         <div className="flex items-center gap-3 mb-5">
           <div className="w-8 h-px bg-primary" />
-          <span className="font-mono text-primary text-xs uppercase tracking-widest">How It Works</span>
+          <span className="font-mono text-primary text-xs uppercase tracking-widest">How It Goes</span>
         </div>
         <h2 className="font-display font-extrabold text-4xl md:text-5xl text-text mb-4 leading-tight">
-          From Idea to <span className="text-gradient">Live</span> in Days
+          How a Project <span className="text-gradient">Actually Works</span>
         </h2>
         <p className="font-body text-text-2 text-lg max-w-lg">
-          A tight, three-phase process built to ship fast without cutting corners on quality.
+          Three phases. You'll know exactly where things stand at every step.
         </p>
       </div>
 
       <div className="relative">
-        {/* Connector line (desktop) */}
         <div className="absolute top-10 left-14 right-14 h-px bg-gradient-to-r from-primary/25 via-accent/30 to-primary/25 hidden md:block" />
 
         <div className="grid md:grid-cols-3 gap-6">
@@ -593,24 +557,23 @@ function About() {
     <section id="about" ref={ref} className="py-28 bg-surface">
       <div className="max-w-6xl mx-auto px-6">
         <div className="grid md:grid-cols-2 gap-16 items-center">
-          {/* Text */}
           <div>
             <div className="about-el flex items-center gap-3 mb-6">
               <div className="w-8 h-px bg-primary" />
               <span className="font-mono text-primary text-xs uppercase tracking-widest">The Founder</span>
             </div>
             <h2 className="about-el font-display font-extrabold text-4xl md:text-5xl text-text mb-6 leading-tight">
-              Building the Future of{' '}
-              <em className="font-serif not-italic text-gradient">Small Business AI</em>
+              Why an 18-Year-Old{' '}
+              <em className="font-serif not-italic text-gradient">Built This</em>
             </h2>
             <p className="about-el font-body text-text-2 text-base leading-relaxed mb-5">
-              I'm Madhav — 18 years old and building Delvox Labs entirely in public. I started this studio because I saw a clear gap: enterprise companies were getting AI-supercharged tooling while small businesses were stuck with outdated websites and manual workflows.
+              I'm Madhav. I started Delvox Labs at 18 because I wanted to build real things that solve real problems — and small businesses kept coming up as the obvious place to do that. Most of them are running on a website that hasn't changed since 2015, a Google Form, and someone manually forwarding emails.
             </p>
             <p className="about-el font-body text-text-2 text-base leading-relaxed mb-8">
-              Every project I take on is proof that small businesses deserve the same quality of AI infrastructure as Fortune 500 companies — built by someone who actually cares about the outcome, not just the invoice.
+              My first client was a plumbing company. I built their whole site from scratch in under a week. That proved the model: fast builds, real tooling, honest pricing. I'm doing this in public — sharing every project, every lesson, every misstep — because I think the best way to grow is to just ship things and talk about it.
             </p>
             <div className="about-el flex flex-wrap gap-2.5">
-              {['Building in Public', 'AI-First', 'Results-Driven', 'Claude AI Partner'].map((tag) => (
+              {['Building in Public', 'Solo Founder', 'AI-First', 'Ships Fast'].map((tag) => (
                 <span key={tag} className="font-mono text-xs text-text-2 bg-bg border border-border rounded-full px-3 py-1.5">
                   {tag}
                 </span>
@@ -618,15 +581,14 @@ function About() {
             </div>
           </div>
 
-          {/* Card */}
           <div className="about-el">
             <div className="glass rounded-3xl p-8 border-primary/20 border relative overflow-hidden">
               <div className="absolute top-0 right-0 w-40 h-40 bg-primary/8 rounded-full blur-3xl pointer-events-none" />
               <div className="relative z-10">
-                {/* Avatar */}
+                {/* Avatar placeholder */}
                 <div className="flex items-center gap-4 mb-7">
-                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary to-accent flex items-center justify-center text-2xl font-display font-extrabold text-white flex-shrink-0">
-                    M
+                  <div className="w-16 h-16 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center flex-shrink-0">
+                    <User size={28} className="text-primary/50" />
                   </div>
                   <div>
                     <div className="font-display font-bold text-text text-lg">Madhav Sharma</div>
@@ -634,13 +596,12 @@ function About() {
                   </div>
                 </div>
 
-                {/* Details */}
                 <div className="space-y-0">
                   {[
-                    { label: 'Age',    value: '18 years old' },
-                    { label: 'Stack',  value: 'React · Python · Claude AI' },
-                    { label: 'Model',  value: 'Building in Public' },
-                    { label: 'Status', value: 'Open for clients' },
+                    { label: 'Age',          value: '18 years old' },
+                    { label: 'First client', value: 'FixIt Plumbers' },
+                    { label: 'Stack',        value: 'React · Python · Claude AI' },
+                    { label: 'Status',       value: 'Taking new clients' },
                   ].map(({ label, value }) => (
                     <div
                       key={label}
@@ -681,18 +642,14 @@ function TechStack() {
   }, [])
 
   const STACK = [
-    { name: 'Claude AI',     emoji: '🧠' },
-    { name: 'React',         emoji: '⚛️' },
-    { name: 'Python',        emoji: '🐍' },
-    { name: 'Vite',          emoji: '⚡' },
-    { name: 'Tailwind CSS',  emoji: '🎨' },
-    { name: 'Node.js',       emoji: '🟢' },
-    { name: 'n8n',           emoji: '🔗' },
-    { name: 'GSAP',          emoji: '✨' },
-  ]
-
-  const TERMINAL_LINES = [
-    { prefix: '❯', cmd: 'npm', rest: ' run build:ai-agent', delay: 0 },
+    { name: 'Claude AI',    emoji: '🧠' },
+    { name: 'React',        emoji: '⚛️' },
+    { name: 'Python',       emoji: '🐍' },
+    { name: 'Vite',         emoji: '⚡' },
+    { name: 'Tailwind CSS', emoji: '🎨' },
+    { name: 'Node.js',      emoji: '🟢' },
+    { name: 'n8n',          emoji: '🔗' },
+    { name: 'GSAP',         emoji: '✨' },
   ]
 
   return (
@@ -700,18 +657,17 @@ function TechStack() {
       <div className="mb-16 text-center">
         <div className="flex items-center justify-center gap-3 mb-5">
           <div className="w-8 h-px bg-primary" />
-          <span className="font-mono text-primary text-xs uppercase tracking-widest">Our Toolkit</span>
+          <span className="font-mono text-primary text-xs uppercase tracking-widest">The Stack</span>
           <div className="w-8 h-px bg-primary" />
         </div>
         <h2 className="font-display font-extrabold text-4xl md:text-5xl text-text mb-4 leading-tight">
-          Powered by the <span className="text-gradient">Best Tools</span>
+          Tools I <span className="text-gradient">Actually Use</span>
         </h2>
         <p className="font-body text-text-2 text-lg max-w-lg mx-auto">
-          We pick tools on merit, not trend. Modern stack, built for production.
+          No bloated frameworks picked for the résumé. Every tool here earned its place in the last few months of shipping real projects.
         </p>
       </div>
 
-      {/* Badge grid */}
       <div className="flex flex-wrap justify-center gap-3 mb-14">
         {STACK.map(({ name, emoji }) => (
           <div
@@ -724,7 +680,6 @@ function TechStack() {
         ))}
       </div>
 
-      {/* Terminal window */}
       <div className="glass rounded-2xl p-6 border-primary/20">
         <div className="flex items-center gap-2 mb-5">
           <div className="w-3 h-3 rounded-full bg-red-500/60" />
@@ -735,12 +690,12 @@ function TechStack() {
         <div className="font-mono text-sm space-y-2">
           <p className="text-text-2">
             <span className="text-primary">❯ </span>
-            <span className="text-accent">npm</span> run build:ai-agent
+            <span className="text-accent">node</span> scripts/ship-fixit.js
           </p>
-          <p className="text-muted text-xs pl-4">✓ Compiling React components...</p>
-          <p className="text-muted text-xs pl-4">✓ Connecting Claude AI endpoints...</p>
-          <p className="text-muted text-xs pl-4">✓ Deploying automation workflows...</p>
-          <p className="text-green-400 text-xs pl-4">✓ Build complete. Your business just got smarter.</p>
+          <p className="text-muted text-xs pl-4">✓ Building React site...</p>
+          <p className="text-muted text-xs pl-4">✓ Running Claude AI on contact form logic...</p>
+          <p className="text-muted text-xs pl-4">✓ Deploying to prod...</p>
+          <p className="text-green-400 text-xs pl-4">✓ Done. Client got their site in 6 days.</p>
           <p className="text-text-2 pt-1">
             <span className="text-primary">❯ </span>
             <span className="cursor-blink">█</span>
@@ -785,14 +740,14 @@ function Contact() {
         <div className="text-center mb-14">
           <div className="flex items-center justify-center gap-3 mb-5">
             <div className="w-8 h-px bg-primary" />
-            <span className="font-mono text-primary text-xs uppercase tracking-widest">Get In Touch</span>
+            <span className="font-mono text-primary text-xs uppercase tracking-widest">Start Something</span>
             <div className="w-8 h-px bg-primary" />
           </div>
           <h2 className="font-display font-extrabold text-4xl md:text-5xl text-text mb-4 leading-tight">
-            Let's Build Something <span className="text-gradient">Together</span>
+            Got a Project? <span className="text-gradient">Let's Talk.</span>
           </h2>
           <p className="font-body text-text-2 text-lg max-w-md mx-auto">
-            Tell us about your business and what you need. We'll reply within 24 hours.
+            No sales calls. Just a quick message about what you're working on — I reply the same day.
           </p>
         </div>
 
@@ -802,8 +757,8 @@ function Contact() {
               <div className="w-16 h-16 rounded-full bg-green-500/10 border border-green-500/30 flex items-center justify-center mx-auto mb-5">
                 <Check size={28} className="text-green-400" />
               </div>
-              <h3 className="font-display font-bold text-2xl text-text mb-2">Message Sent!</h3>
-              <p className="font-body text-text-2">We'll get back to you within 24 hours.</p>
+              <h3 className="font-display font-bold text-2xl text-text mb-2">Got it — thanks.</h3>
+              <p className="font-body text-text-2">I'll reply today or first thing tomorrow.</p>
             </div>
           ) : (
             <form onSubmit={submit} className="space-y-6">
@@ -819,16 +774,16 @@ function Contact() {
               </div>
               <div>
                 <label className="block font-mono text-xs text-muted uppercase tracking-wider mb-2">Business / Project</label>
-                <input type="text" value={form.business} onChange={set('business')} placeholder="Tell us about your business" className={inputClass} />
+                <input type="text" value={form.business} onChange={set('business')} placeholder="What kind of business do you run?" className={inputClass} />
               </div>
               <div>
-                <label className="block font-mono text-xs text-muted uppercase tracking-wider mb-2">Message</label>
+                <label className="block font-mono text-xs text-muted uppercase tracking-wider mb-2">What do you need?</label>
                 <textarea
                   required
                   rows={5}
                   value={form.message}
                   onChange={set('message')}
-                  placeholder="What do you need built? What problems are you trying to solve?"
+                  placeholder="Describe the problem you're trying to solve. The messier the better — I can figure out the solution."
                   className={`${inputClass} resize-none`}
                 />
               </div>
@@ -862,7 +817,6 @@ function Footer() {
     <footer className="py-12 border-t border-border">
       <div className="max-w-6xl mx-auto px-6">
         <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-          {/* Logo */}
           <div className="flex items-center gap-2.5">
             <div className="w-6 h-6 rounded-md bg-primary flex items-center justify-center flex-shrink-0">
               <Terminal size={12} className="text-white" />
@@ -872,21 +826,19 @@ function Footer() {
             </span>
           </div>
 
-          {/* Status */}
           <div className="flex items-center gap-2">
             <div className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
             <span className="font-mono text-xs text-muted">All systems operational</span>
           </div>
 
-          {/* Socials */}
           <div className="flex items-center gap-4">
             <a href="mailto:madhavs.work07@gmail.com" aria-label="Email" className="text-muted hover:text-text transition-colors duration-200">
               <Mail size={18} />
             </a>
-            <a href="https://github.com/madhav-sharma" target="_blank" rel="noopener noreferrer" aria-label="GitHub" className="text-muted hover:text-text transition-colors duration-200">
+            <a href="https://github.com/madhavvsharmma7" target="_blank" rel="noopener noreferrer" aria-label="GitHub" className="text-muted hover:text-text transition-colors duration-200">
               <GithubIcon />
             </a>
-            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" aria-label="Twitter/X" className="text-muted hover:text-text transition-colors duration-200">
+            <a href="https://x.com/madhavvsharmma" target="_blank" rel="noopener noreferrer" aria-label="X / Twitter" className="text-muted hover:text-text transition-colors duration-200">
               <XIcon />
             </a>
           </div>
