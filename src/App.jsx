@@ -106,6 +106,53 @@ function LogoMark({ size = 28, uid = 'a' }) {
   )
 }
 
+// ─── LoadingScreen ────────────────────────────────────────────────────────────
+function LoadingScreen({ onDone }) {
+  const overlayRef = useRef(null)
+  const logoRef = useRef(null)
+  const glowRef = useRef(null)
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      gsap.fromTo(logoRef.current,
+        { scale: 0.72, opacity: 0 },
+        { scale: 1, opacity: 1, duration: 0.45, ease: 'back.out(1.6)' }
+      )
+      gsap.fromTo(glowRef.current,
+        { scale: 0.6, opacity: 0.55 },
+        { scale: 1.8, opacity: 0, duration: 1.4, ease: 'power2.out', repeat: -1 }
+      )
+      gsap.to(logoRef.current, {
+        scale: 1.07, duration: 0.9, ease: 'sine.inOut',
+        yoyo: true, repeat: -1, delay: 0.45,
+      })
+    })
+
+    const timer = setTimeout(() => {
+      gsap.to(overlayRef.current, {
+        opacity: 0, duration: 0.55, ease: 'power2.inOut',
+        onComplete: onDone,
+      })
+    }, 1150)
+
+    return () => { ctx.revert(); clearTimeout(timer) }
+  }, [onDone])
+
+  return (
+    <div ref={overlayRef} style={{ position: 'fixed', inset: 0, zIndex: 9999, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: '#080C14' }}>
+      <div style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div ref={glowRef} style={{ position: 'absolute', width: 180, height: 180, borderRadius: '50%', background: 'radial-gradient(circle, #38BDF8 0%, #2563EB 35%, transparent 68%)', pointerEvents: 'none' }} />
+        <div ref={logoRef} style={{ position: 'relative' }}>
+          <LogoMark size={100} uid="loader" />
+        </div>
+      </div>
+      <p style={{ marginTop: 20, fontFamily: 'var(--font-display, sans-serif)', fontWeight: 700, fontSize: 15, letterSpacing: '0.08em', color: '#F8FAFC', opacity: 0.75 }}>
+        Delvox <span style={{ background: 'linear-gradient(90deg,#38BDF8,#2563EB)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Labs</span>
+      </p>
+    </div>
+  )
+}
+
 // ─── Navbar ───────────────────────────────────────────────────────────────────
 function Navbar() {
   const [scrolled, setScrolled] = useState(false)
@@ -875,17 +922,21 @@ function Footer() {
 
 // ─── App ──────────────────────────────────────────────────────────────────────
 export default function App() {
+  const [loading, setLoading] = useState(true)
   return (
-    <div className="bg-bg text-text min-h-screen">
-      <Navbar />
-      <Hero />
-      <Services />
-      <Portfolio />
-      <Process />
-      <About />
-      <TechStack />
-      <Contact />
-      <Footer />
-    </div>
+    <>
+      {loading && <LoadingScreen onDone={() => setLoading(false)} />}
+      <div className="bg-bg text-text min-h-screen">
+        <Navbar />
+        <Hero />
+        <Services />
+        <Portfolio />
+        <Process />
+        <About />
+        <TechStack />
+        <Contact />
+        <Footer />
+      </div>
+    </>
   )
 }
