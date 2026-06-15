@@ -3,14 +3,14 @@
 @tailwind utilities;
 
 :root {
-  --bg: #080C14;
-  --surface: #0D1424;
-  --border: #1E2D4A;
-  --primary: #2563EB;
-  --accent: #38BDF8;
-  --muted: #64748B;
-  --text: #F8FAFC;
-  --text-2: #94A3B8;
+  --bg: #000000;
+  --text: #F5F5F7;
+  --text-2: #A1A1A6;
+  --text-3: #86868B;
+  --line: rgba(255, 255, 255, 0.12);
+  --surface: rgba(255, 255, 255, 0.05);
+  --blue: #2997FF;
+  --blue-btn: #0071E3;
 }
 
 * {
@@ -25,122 +25,334 @@ html {
   color: var(--text);
 }
 
+/* Lenis smooth-scroll base (instance created in JS) */
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+.lenis.lenis-stopped { overflow: hidden; }
+.lenis.lenis-scrolling iframe { pointer-events: none; }
+
+/* Film grain — subtle tactile texture over the flat black */
+.grain {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.04;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
 /* Offset anchor sections so the fixed navbar doesn't cover the heading */
 section[id] {
-  scroll-margin-top: 5rem;
+  scroll-margin-top: 6rem;
 }
 
 body {
   margin: 0;
-  font-family: 'Inter', sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text',
+    'Helvetica Neue', 'Inter', system-ui, sans-serif;
   overflow-x: hidden;
   background: var(--bg);
+  color: var(--text);
+  letter-spacing: -0.01em;
 }
 
-#root {
-  width: 100%;
+#root { width: 100%; }
+
+::selection {
+  background: rgba(41, 151, 255, 0.32);
+  color: #fff;
 }
 
-::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar { width: 9px; }
 ::-webkit-scrollbar-track { background: var(--bg); }
-::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 2px; }
+::-webkit-scrollbar-thumb { background: #2c2c2e; border-radius: 6px; }
+::-webkit-scrollbar-thumb:hover { background: #3a3a3c; }
 
-/* Glass morphism */
-.glass {
-  background: rgba(13, 20, 36, 0.7);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(30, 45, 74, 0.6);
+/* ── Type scale — Apple proportions ───────────────────────────────── */
+.display {
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.04;
+}
+.headline {
+  font-weight: 600;
+  letter-spacing: -0.022em;
+  line-height: 1.07;
+}
+.lead {
+  font-weight: 400;
+  letter-spacing: -0.012em;
+  line-height: 1.38;
+  color: var(--text-2);
+}
+.eyebrow {
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  color: var(--text-3);
+  font-size: 0.95rem;
 }
 
-/* Grid background */
-.grid-bg {
-  background-image:
-    linear-gradient(rgba(37, 99, 235, 0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(37, 99, 235, 0.04) 1px, transparent 1px);
-  background-size: 50px 50px;
+/* ── Frosted-glass navbar (Liquid Glass) ──────────────────────────── */
+.nav-glass {
+  background: rgba(22, 22, 23, 0.55);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  backdrop-filter: saturate(180%) blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-/* Gradient text */
-.text-gradient {
-  background: linear-gradient(135deg, #2563EB 0%, #38BDF8 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+/* ── Buttons — flat Apple pills, no glow ──────────────────────────── */
+.btn-blue {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  background: var(--blue-btn);
+  color: #fff;
+  font-weight: 400;
+  border-radius: 980px;
+  transition: background 0.22s ease, filter 0.12s ease;
+  cursor: pointer;
 }
+.btn-blue:hover { background: #0077ED; }
+.btn-blue:active { filter: brightness(0.9); }
+.btn-blue:disabled { opacity: 0.5; cursor: default; }
 
-/* Primary button */
-.btn-primary {
-  background: linear-gradient(135deg, #2563EB, #1D4ED8);
-  border: 1px solid rgba(37, 99, 235, 0.5);
-  transition: all 0.3s ease;
+/* Shimmer / shine sweep — runs across the CTA every 3s */
+.btn-shimmer {
+  position: relative;
   overflow: hidden;
 }
-.btn-primary::before {
+.btn-shimmer::after {
   content: '';
   position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, #38BDF8, #2563EB);
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  z-index: 0;
+  top: 0;
+  left: 0;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(
+    100deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.35) 50%,
+    transparent 100%
+  );
+  transform: translateX(-180%);
+  animation: btn-shimmer-sweep 3s ease-in-out infinite;
+  pointer-events: none;
 }
-.btn-primary:hover::before { opacity: 1; }
-.btn-primary:hover {
-  box-shadow: 0 8px 30px rgba(37, 99, 235, 0.4);
-  transform: translateY(-2px);
-}
-
-/* Card hover */
-.card-hover {
-  transition: all 0.3s ease;
-  border: 1px solid var(--border);
-}
-.card-hover:hover {
-  border-color: rgba(37, 99, 235, 0.5);
-  box-shadow: 0 20px 60px rgba(37, 99, 235, 0.12);
-  transform: translateY(-4px);
+@keyframes btn-shimmer-sweep {
+  0%   { transform: translateX(-180%); }
+  18%  { transform: translateX(280%); }
+  100% { transform: translateX(280%); }
 }
 
-/* Input focus */
-input:focus, textarea:focus {
+/* Text link — Apple blue with chevron glyph */
+.link-blue {
+  color: var(--blue);
+  font-weight: 400;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+.link-blue:hover { text-decoration: underline; text-underline-offset: 3px; }
+.link-blue:active { opacity: 0.55; }
+
+/* ── Form fields — quiet filled, no card chrome ───────────────────── */
+.field {
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  padding: 0.95rem 1.1rem;
+  color: var(--text);
+  font-family: inherit;
+  font-size: 1.0625rem;
+  letter-spacing: -0.01em;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+.field::placeholder { color: var(--text-3); }
+.field:focus {
   outline: none;
-  border-color: var(--primary) !important;
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+  border-color: var(--blue);
+  background: rgba(255, 255, 255, 0.07);
 }
 
-/* Keyframes */
-@keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-8px); }
+/* Hairline divider */
+.hr {
+  border: 0;
+  border-top: 1px solid var(--line);
 }
 
-@keyframes pulse-ring {
-  0% { transform: scale(1); opacity: 0.6; }
-  100% { transform: scale(2.2); opacity: 0; }
+/* ── Scroll reveal — subtle, opacity + small translate only ───────── */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
 }
 
-@keyframes shimmer {
-  0% { background-position: -400px 0; }
-  100% { background-position: 400px 0; }
+/* CSS hamburger (Apple draws its own — no icon asset) */
+.hamburger { width: 18px; height: 12px; position: relative; }
+.hamburger span {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: var(--text);
+  transition: transform 0.3s ease, opacity 0.3s ease;
 }
+.hamburger span:nth-child(1) { top: 0; }
+.hamburger span:nth-child(2) { bottom: 0; }
+.hamburger.open span:nth-child(1) { top: 5px; transform: rotate(45deg); }
+.hamburger.open span:nth-child(2) { bottom: 6px; transform: rotate(-45deg); }
 
 @keyframes cursor-blink {
   0%, 100% { opacity: 1; }
   50% { opacity: 0; }
 }
+.cursor-blink { animation: cursor-blink 1.1s step-end infinite; }
 
-.cursor-blink {
-  animation: cursor-blink 1s step-end infinite;
-}
-
-/* Fade-in on scroll (for JS IntersectionObserver) */
-.fade-in {
+/* Custom cursor dot — base is 40px, GSAP scales to 0.2 (8px) by default */
+.cursor-dot {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 9999px;
+  background: #ffffff;
+  mix-blend-mode: difference;
+  pointer-events: none;
+  z-index: 9000;
   opacity: 0;
-  transform: translateY(24px);
-  transition: opacity 0.6s ease, transform 0.6s ease;
+  will-change: transform;
 }
-.fade-in.visible {
-  opacity: 1;
-  transform: translateY(0);
+/* Hide the native cursor when the custom one is active (keep text caret in fields) */
+.has-custom-cursor,
+.has-custom-cursor * { cursor: none !important; }
+.has-custom-cursor input,
+.has-custom-cursor textarea { cursor: text !important; }
+@media (pointer: coarse) {
+  .cursor-dot { display: none; }
+}
+
+/* Horizontal marquee / ticker */
+.marquee {
+  overflow: hidden;
+  white-space: nowrap;
+}
+.marquee__track {
+  display: inline-flex;
+  align-items: center;
+  will-change: transform;
+  animation: marquee 46s linear infinite;
+}
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* Hero parallax wrapper */
+.parallax { will-change: transform; }
+
+/* Portfolio horizontal-scroll stage — enabled by JS only on desktop + no-reduced-motion.
+   Without this class the markup is a normal vertical stack (no full-viewport void). */
+.pf-horizontal {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+.pf-horizontal .pf-track {
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: stretch;     /* cards share height so the text-only card fills the stage */
+  width: max-content;
+  max-width: none;
+  margin: 0;
+  gap: 2.5rem;
+  padding-left: 10vw;
+  padding-right: 10vw;
+}
+.pf-horizontal .pf-card {
+  width: 62vw;
+  flex-shrink: 0;
+}
+
+/* Hero headline words start hidden (GSAP reveals them after the loader) */
+.hero-word { opacity: 0; will-change: transform, opacity; }
+
+/* Slow-rotating logo watermark */
+@keyframes spin-slow {
+  to { transform: rotate(360deg); }
+}
+.rotate-slow {
+  animation: spin-slow 80s linear infinite;
+  will-change: transform;
+}
+
+/* ── FAQ accordion ────────────────────────────────────────────────── */
+.faq-answer {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.34s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.faq-answer.open { grid-template-rows: 1fr; }
+.faq-answer > div { overflow: hidden; }
+
+/* CSS-drawn +/− indicator (no icon asset) */
+.faq-plus {
+  position: relative;
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+.faq-plus::before,
+.faq-plus::after {
+  content: '';
+  position: absolute;
+  background: var(--text-3);
+  transition: transform 0.3s ease, background 0.2s ease;
+}
+.faq-plus::before { top: 50%; left: 0; width: 100%; height: 1.5px; transform: translateY(-50%); }
+.faq-plus::after  { left: 50%; top: 0; width: 1.5px; height: 100%; transform: translateX(-50%); }
+.faq-plus.open::after { transform: translateX(-50%) scaleY(0); }
+.group:hover .faq-plus::before,
+.group:hover .faq-plus::after { background: var(--text); }
+
+/* Loading screen mark — subtle fade-in + breathing pulse */
+@keyframes loader-fade {
+  from { opacity: 0; transform: scale(0.94); }
+  to   { opacity: 1; transform: scale(1); }
+}
+@keyframes loader-pulse {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.05); }
+}
+.loader-mark {
+  animation:
+    loader-fade 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards,
+    loader-pulse 2.2s ease-in-out 0.7s infinite;
+}
+
+/* ── Reduced motion ───────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  .reveal { opacity: 1; transform: none; }
+  .marquee__track { animation: none; }
+  .cursor-dot { display: none; }
+  .parallax { transform: none !important; }
+  .rotate-slow { animation: none; }
+  .btn-shimmer::after { display: none; }
+  .hero-word { opacity: 1 !important; transform: none !important; }
 }
