@@ -151,22 +151,6 @@ function SplitReveal({ text, as: Tag = 'h2', className = '', onLoad = false, sta
   )
 }
 
-// ─── CountUp — animates a number from 0 when shown ──────────────────────────────
-function CountUp({ end, suffix = '', duration = 1.4 }) {
-  const ref = useRef(null)
-  useEffect(() => {
-    const el = ref.current
-    if (prefersReduced()) { el.textContent = `${end}${suffix}`; return }
-    const obj = { v: 0 }
-    const tween = gsap.to(obj, {
-      v: end, duration, ease: 'power2.out', delay: 0.15,
-      onUpdate: () => { el.textContent = `${Math.round(obj.v)}${suffix}` },
-    })
-    return () => tween.kill()
-  }, [end, suffix, duration])
-  return <span ref={ref}>{`0${suffix}`}</span>
-}
-
 // ─── ScrollProgress — thin line on the right that grows with scroll ─────────────
 function ScrollProgress() {
   const barRef = useRef(null)
@@ -196,13 +180,7 @@ function LogoDivider() {
   return (
     <Reveal className="flex items-center justify-center gap-6 py-4">
       <span className="hidden sm:block h-px w-16 bg-line" />
-      <img
-        src="/DelvoxLogoMark.png"
-        alt=""
-        aria-hidden="true"
-        className="h-9 w-auto opacity-80"
-        style={{ filter: 'invert(1)', mixBlendMode: 'screen' }}
-      />
+      <LogoMark className="h-8 w-auto opacity-80 text-text" />
       <span className="hidden sm:block h-px w-16 bg-line" />
     </Reveal>
   )
@@ -214,6 +192,26 @@ function Wordmark({ className = '' }) {
     <span className={`font-semibold tracking-tight text-text ${className}`}>
       Delvox Labs
     </span>
+  )
+}
+
+// ─── LogoMark — arrow-D monogram, crisp single-weight vector (currentColor) ──────
+function LogoMark({ className = '', style }) {
+  return (
+    <svg
+      className={className}
+      style={style}
+      viewBox="0 0 100 100"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path d="M25 20 L45 20 L75 50 L45 80 L25 80 Z" />
+    </svg>
   )
 }
 
@@ -237,12 +235,7 @@ function LoadingScreen({ onDone }) {
         transition: 'opacity 0.55s ease',
       }}
     >
-      <img
-        src="/DelvoxLogoMark.png"
-        alt="Delvox Labs"
-        className="loader-mark w-auto h-20 md:h-24"
-        style={{ filter: 'invert(1)', mixBlendMode: 'screen' }}
-      />
+      <LogoMark className="loader-mark w-auto h-14 md:h-16 text-text" />
     </div>
   )
 }
@@ -267,12 +260,7 @@ function Navbar() {
             className="cursor-pointer flex items-center"
             aria-label="Delvox Labs — back to top"
           >
-            <img
-              src="/DelvoxLogoMark.png"
-              alt="Delvox Labs"
-              className="h-7 w-auto"
-              style={{ filter: 'invert(1)', mixBlendMode: 'screen' }}
-            />
+            <LogoMark className="h-7 w-auto text-text" />
           </button>
 
           <nav className="hidden md:flex items-center gap-8">
@@ -486,175 +474,8 @@ function Services() {
   )
 }
 
-// ─── CaseStudyModal ─────────────────────────────────────────────────────────────
-function CaseStudyModal({ onClose }) {
-  const overlayRef = useRef(null)
-
-  useEffect(() => {
-    document.body.style.overflow = 'hidden'
-    lenisInstance?.stop()
-    const onKey = (e) => { if (e.key === 'Escape') onClose() }
-    window.addEventListener('keydown', onKey)
-    return () => {
-      document.body.style.overflow = ''
-      lenisInstance?.start()
-      window.removeEventListener('keydown', onKey)
-    }
-  }, [onClose])
-
-  const buildItems = [
-    'Full responsive site — designed mobile-first because that\'s where plumbing searches happen',
-    'Dedicated service pages: emergency repairs, boiler servicing, bathroom installs, leak detection',
-    'Contact form that routes directly to their email inbox — no third-party booking tool needed',
-    'Trust signals: Gas Safe registration badge, customer review highlights, response-time promise',
-    'Animated hero, smooth scroll, sub-1s load time on mobile',
-    'Deployed on Vercel with a custom domain — indexed by Google within 24 hours',
-  ]
-
-  const stackItems = [
-    { label: 'Claude Code', note: 'wrote and iterated the entire build' },
-    { label: 'React + Vite', note: 'component-based frontend, fast HMR' },
-    { label: 'Tailwind CSS', note: 'utility-first styling, no design system overhead' },
-    { label: 'GSAP', note: 'scroll animations, hero entrance' },
-    { label: 'Vercel', note: 'CI/CD on push, edge network delivery' },
-  ]
-
-  return (
-    <div
-      ref={overlayRef}
-      onClick={(e) => { if (e.target === e.currentTarget) onClose() }}
-      data-lenis-prevent
-      className="fixed inset-0 z-[2000] overflow-y-auto"
-      style={{ background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)' }}
-    >
-      <div className="max-w-3xl mx-auto my-8 md:my-12 bg-bg-2 border border-line rounded-3xl">
-        <div className="px-6 md:px-14 py-14">
-
-          <button
-            onClick={onClose}
-            className="link-blue text-sm mb-12 cursor-pointer"
-          >
-            ‹&nbsp;Back to portfolio
-          </button>
-
-          <div className="text-center mb-14">
-            <p className="eyebrow mb-4">Case Study · Client #1</p>
-            <h2 className="display text-text text-4xl md:text-6xl mb-6">FixIt Plumbers</h2>
-            <p className="lead text-lg max-w-xl mx-auto">
-              A local plumbing company in London with no website, no online presence, and no way for new customers to find them. This is what got built, how, and in how long.
-            </p>
-          </div>
-
-          {/* The number that matters */}
-          <div className="text-center border-t border-b border-line py-12 mb-16">
-            <p className="eyebrow mb-5">The number that matters</p>
-            <p className="display text-text text-6xl md:text-8xl mb-3"><CountUp end={6} suffix=" days." /></p>
-            <p className="headline text-text-2 text-2xl mb-5">Zero to live.</p>
-            <p className="lead text-base max-w-md mx-auto">
-              From first conversation to a deployed, indexed, production website. No templates, no page builders — written from scratch and shipped.
-            </p>
-          </div>
-
-          {/* 01 — The Problem */}
-          <div className="mb-16">
-            <p className="eyebrow mb-6">01 — The Problem</p>
-            <div className="space-y-4 max-w-2xl">
-              <p className="lead text-base text-text-2">
-                FixIt had been running for years entirely on word-of-mouth and a basic Google Business listing — name, phone number, a handful of reviews. That was it.
-              </p>
-              <p className="lead text-base text-text-2">
-                No website meant no way to show what services they actually offered. No way to display pricing context. No way to build trust before a customer picked up the phone. Every new job was a cold call to a stranger who found a number on Google.
-              </p>
-              <p className="lead text-base text-text-2">
-                Competitors with even basic websites were getting chosen first. Not because they were better — just because they showed up as more credible online.
-              </p>
-            </div>
-          </div>
-
-          {/* Before / After */}
-          <div className="grid md:grid-cols-2 gap-8 mb-16">
-            <div>
-              <p className="eyebrow mb-5">Before</p>
-              <div className="space-y-1.5">
-                <p className="text-text text-base font-medium">FixIt Plumbers</p>
-                <p className="text-text-3 text-xs">Google Business Profile</p>
-                <p className="text-text-3 text-sm pt-2">★★★★★ &nbsp;12 reviews</p>
-                <p className="text-text-3 text-sm">07700 900 123</p>
-                <p className="text-text-3 text-sm">Bermondsey, London</p>
-                <p className="text-text-3 text-xs italic pt-3">No website · No service info · No booking</p>
-              </div>
-            </div>
-            <div>
-              <p className="eyebrow mb-5">After</p>
-              <div className="rounded-2xl overflow-hidden border border-line">
-                <img
-                  src="https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?w=600&q=80"
-                  alt="FixIt Plumbers live website"
-                  className="w-full h-40 object-cover"
-                  loading="lazy"
-                />
-              </div>
-              <p className="text-text-3 text-xs mt-3">Live · fixit-plumbers.vercel.app</p>
-            </div>
-          </div>
-
-          {/* 02 — The Build */}
-          <div className="mb-16">
-            <p className="eyebrow mb-6">02 — The Build</p>
-            <p className="lead text-base text-text-2 max-w-2xl mb-8">
-              Not a template. Not a Wix site. A custom-built React application written specifically for their business, their services, and their customers.
-            </p>
-            <ul className="max-w-2xl">
-              {buildItems.map((item, i) => (
-                <li key={i} className="text-text-2 text-base leading-relaxed py-3.5 border-t border-line">
-                  {item}
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* 03 — The Approach */}
-          <div className="mb-16">
-            <p className="eyebrow mb-6">03 — The Approach</p>
-            <p className="lead text-base text-text-2 max-w-2xl mb-6">
-              The whole build ran through Claude Code — I described what I needed, iterated on the output, and pushed when it was right. That's how a solo 18-year-old ships a production site in under a week.
-            </p>
-            <p className="lead text-base text-text-2 max-w-2xl mb-10">
-              No agency overhead. No project manager handoffs. One person, clear requirements, the right tools. The client got daily progress updates, saw the site take shape in real time, and signed off on a live URL six days after we started.
-            </p>
-            <div className="max-w-2xl">
-              {stackItems.map((s, i) => (
-                <div key={i} className="flex items-center justify-between py-4 border-t border-line last:border-b">
-                  <span className="text-text text-base">{s.label}</span>
-                  <span className="text-text-3 text-sm text-right max-w-[55%]">{s.note}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="flex flex-col sm:flex-row items-center gap-6 pt-10 border-t border-line">
-            <a
-              href="https://fixit-plumbers.vercel.app"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn-blue px-6 py-3 text-[15px]"
-            >
-              View live site&nbsp;›
-            </a>
-            <button onClick={onClose} className="link-blue text-sm cursor-pointer">
-              ‹&nbsp;Back to portfolio
-            </button>
-          </div>
-
-        </div>
-      </div>
-    </div>
-  )
-}
-
 // ─── Portfolio ──────────────────────────────────────────────────────────────────
 function Portfolio() {
-  const [caseStudyOpen, setCaseStudyOpen] = useState(false)
   const pinRef = useRef(null)
   const trackRef = useRef(null)
 
@@ -690,67 +511,63 @@ function Portfolio() {
   }, [])
 
   return (
-    <>
-      {caseStudyOpen && <CaseStudyModal onClose={() => setCaseStudyOpen(false)} />}
-      <section id="portfolio" className="pt-16 md:pt-24 pb-0">
-        <div className="max-w-5xl mx-auto px-6">
-          <SectionHeader
-            eyebrow="Work"
-            title="First Client Out the Door"
-            sub="One live project so far. More in the pipeline. This is what Delvox actually ships."
-          />
-        </div>
+    <section id="portfolio" className="pt-16 md:pt-24 pb-0">
+      <div className="max-w-5xl mx-auto px-6">
+        <SectionHeader
+          eyebrow="Work"
+          title="First Client Out the Door"
+          sub="One live project so far. More in the pipeline. This is what Delvox actually ships."
+        />
+      </div>
 
-        <div ref={pinRef} className="portfolio-pin">
-          <div ref={trackRef} className="pf-track flex flex-col gap-12 px-6 max-w-5xl mx-auto">
-            {/* Featured */}
-            <div className="pf-card w-full text-center">
-              <button
-                onClick={() => setCaseStudyOpen(true)}
-                className="block w-full rounded-3xl overflow-hidden border border-line cursor-pointer group"
+      <div ref={pinRef} className="portfolio-pin">
+        <div ref={trackRef} className="pf-track flex flex-col gap-12 px-6 max-w-5xl mx-auto">
+          {/* Featured */}
+          <div className="pf-card w-full text-center">
+            <a
+              href="https://sharmatravelagency.vercel.app"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block w-full rounded-3xl overflow-hidden border border-line cursor-pointer group"
+            >
+              <img
+                src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&q=80"
+                alt="Sharma Travels website"
+                className="w-full h-64 md:h-96 object-cover transition-transform duration-700 group-hover:scale-[1.02]"
+                loading="lazy"
+              />
+            </a>
+            <p className="eyebrow mt-10">Luxury Travel Agency</p>
+            <h3 className="headline text-text text-3xl md:text-5xl mt-4">Sharma Travels</h3>
+            <p className="lead text-lg max-w-2xl mx-auto mt-6">
+              Luxury travel agency website with parallax sections, destination cards, and conversational enquiry form.
+            </p>
+            <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3 mt-8">
+              <a
+                href="https://sharmatravelagency.vercel.app"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="link-blue text-[17px]"
               >
-                <img
-                  src="https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?w=1200&q=80"
-                  alt="FixIt Plumbers website"
-                  className="w-full h-64 md:h-96 object-cover transition-transform duration-700 group-hover:scale-[1.02]"
-                  loading="lazy"
-                />
-              </button>
-              <p className="eyebrow mt-10">Local Plumbing Company · Client #1</p>
-              <h3 className="headline text-text text-3xl md:text-5xl mt-4">FixIt Plumbers</h3>
-              <p className="lead text-lg max-w-2xl mx-auto mt-6">
-                My first client. A complete website for a local plumbing company — animated hero, mobile-first layout, contact form that routes straight to their inbox. Went from zero to live in 6 days.
-              </p>
-              <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3 mt-8">
-                <button onClick={() => setCaseStudyOpen(true)} className="link-blue text-[17px] cursor-pointer">
-                  View case study&nbsp;›
-                </button>
-                <a
-                  href="https://fixit-plumbers.vercel.app"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="link-blue text-[17px]"
-                >
-                  View live site&nbsp;›
-                </a>
-              </div>
-            </div>
-
-            {/* Open slot */}
-            <div className="pf-card w-full text-center flex flex-col justify-center">
-              <p className="eyebrow mb-4">Slot #2 — Open</p>
-              <h3 className="headline text-text text-3xl md:text-5xl">Your Business Here</h3>
-              <p className="lead text-lg max-w-2xl mx-auto mt-6">
-                I take on one or two projects at a time so nothing gets rushed. If you're interested, reach out early — slots fill up fast when you charge honest prices.
-              </p>
-              <a href="mailto:madhavs.work07@gmail.com" className="link-blue text-[17px] inline-block mt-8">
-                Get in touch&nbsp;›
+                View live site&nbsp;›
               </a>
             </div>
           </div>
+
+          {/* Open slot */}
+          <div className="pf-card w-full text-center flex flex-col justify-center">
+            <p className="eyebrow mb-4">Slot #2 — Open</p>
+            <h3 className="headline text-text text-3xl md:text-5xl">Your Business Here</h3>
+            <p className="lead text-lg max-w-2xl mx-auto mt-6">
+              I take on one or two projects at a time so nothing gets rushed. If you're interested, reach out early — slots fill up fast when you charge honest prices.
+            </p>
+            <a href="mailto:madhavs.work07@gmail.com" className="link-blue text-[17px] inline-block mt-8">
+              Get in touch&nbsp;›
+            </a>
+          </div>
         </div>
-      </section>
-    </>
+      </div>
+    </section>
   )
 }
 
@@ -808,11 +625,9 @@ function About() {
   return (
     <section id="about" className="relative overflow-hidden py-16 md:py-24 px-6">
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 flex items-center justify-center">
-        <img
-          src="/DelvoxLogoMark.png"
-          alt=""
-          className="rotate-slow w-auto opacity-[0.06]"
-          style={{ height: 'min(92vw, 560px)', filter: 'invert(1)', mixBlendMode: 'screen' }}
+        <LogoMark
+          className="rotate-slow w-auto opacity-[0.06] text-text"
+          style={{ height: 'min(78vw, 420px)' }}
         />
       </div>
       <div className="relative z-10 max-w-3xl mx-auto text-center">
