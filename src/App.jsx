@@ -516,7 +516,7 @@ function Portfolio() {
         <SectionHeader
           eyebrow="Work"
           title="First Client Out the Door"
-          sub="One live project so far. More in the pipeline. This is what Delvox actually ships."
+          sub="Two live projects so far. More in the pipeline. This is what Delvox actually ships."
         />
       </div>
 
@@ -554,9 +554,41 @@ function Portfolio() {
             </div>
           </div>
 
+          {/* FixIt Plumbers */}
+          <div className="pf-card w-full text-center">
+            <a
+              href="https://fixit-plumbers.vercel.app"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block w-full rounded-3xl overflow-hidden border border-line cursor-pointer group"
+            >
+              <img
+                src="https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?w=1200&q=80"
+                alt="FixIt Plumbers website"
+                className="w-full h-64 md:h-96 object-cover transition-transform duration-700 group-hover:scale-[1.02]"
+                loading="lazy"
+              />
+            </a>
+            <p className="eyebrow mt-10">Local Plumbing Company</p>
+            <h3 className="headline text-text text-3xl md:text-5xl mt-4">FixIt Plumbers</h3>
+            <p className="lead text-lg max-w-2xl mx-auto mt-6">
+              A complete website for a local plumbing company — animated hero, mobile-first layout, and a contact form that routes straight to their inbox. Zero to live in 6 days.
+            </p>
+            <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3 mt-8">
+              <a
+                href="https://fixit-plumbers.vercel.app"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="link-blue text-[17px]"
+              >
+                View live site&nbsp;›
+              </a>
+            </div>
+          </div>
+
           {/* Open slot */}
           <div className="pf-card w-full text-center flex flex-col justify-center">
-            <p className="eyebrow mb-4">Slot #2 — Open</p>
+            <p className="eyebrow mb-4">Slot #3 — Open</p>
             <h3 className="headline text-text text-3xl md:text-5xl">Your Business Here</h3>
             <p className="lead text-lg max-w-2xl mx-auto mt-6">
               I take on one or two projects at a time so nothing gets rushed. If you're interested, reach out early — slots fill up fast when you charge honest prices.
