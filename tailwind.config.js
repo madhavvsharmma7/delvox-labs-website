@@ -4,15 +4,15 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Apple-style dark minimalism
-        bg:       '#000000',
-        'bg-2':   '#0A0A0A',
-        text:     '#F5F5F7',
-        'text-2': '#A1A1A6',
+        // Apple-style light minimalism
+        bg:       '#FFFFFF',
+        'bg-2':   '#F5F5F7',
+        text:     '#1D1D1F',
+        'text-2': '#6E6E73',
         'text-3': '#86868B',
-        line:     'rgba(255,255,255,0.12)',
-        surface:  'rgba(255,255,255,0.05)',
-        blue:     '#2997FF',
+        line:     'rgba(0,0,0,0.12)',
+        surface:  'rgba(0,0,0,0.035)',
+        blue:     '#0066CC',
         'blue-btn': '#0071E3',
       },
       fontFamily: {

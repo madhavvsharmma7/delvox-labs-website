@@ -168,7 +168,7 @@ function ScrollProgress() {
     <div className="fixed top-0 right-0 h-screen w-[2px] z-[9000] pointer-events-none" aria-hidden="true">
       <div
         ref={barRef}
-        className="w-full h-full bg-white/70"
+        className="w-full h-full bg-black/25"
         style={{ transform: 'scaleY(0)', transformOrigin: 'top center' }}
       />
     </div>
@@ -230,7 +230,7 @@ function LoadingScreen({ onDone }) {
       style={{
         position: 'fixed', inset: 0, zIndex: 9999,
         display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-        background: '#000000',
+        background: '#ffffff',
         opacity: hide ? 0 : 1,
         transition: 'opacity 0.55s ease',
       }}
@@ -413,6 +413,28 @@ function Hero({ started }) {
   )
 }
 
+// ─── StatsBar — trust metrics directly below the hero ───────────────────────────
+function StatsBar() {
+  const STATS = [
+    { value: '48hr', label: 'Delivery' },
+    { value: '3',    label: 'Live Projects' },
+    { value: '100%', label: 'Satisfaction' },
+  ]
+
+  return (
+    <Reveal className="px-6">
+      <div className="max-w-3xl mx-auto flex items-stretch justify-center divide-x divide-line border-y border-line">
+        {STATS.map(({ value, label }) => (
+          <div key={label} className="flex-1 text-center py-7 px-3 sm:px-6">
+            <div className="headline text-text text-3xl md:text-5xl">{value}</div>
+            <div className="text-text-3 text-xs sm:text-sm mt-2 tracking-wide">{label}</div>
+          </div>
+        ))}
+      </div>
+    </Reveal>
+  )
+}
+
 // ─── Section header ─────────────────────────────────────────────────────────────
 function SectionHeader({ eyebrow, title, sub }) {
   return (
@@ -457,7 +479,7 @@ function Services() {
           <Reveal key={title} className={`relative overflow-hidden text-center py-12 md:py-16 ${i > 0 ? 'border-t border-line' : ''}`}>
             <span
               aria-hidden="true"
-              className="pointer-events-none select-none absolute inset-0 flex items-center justify-center font-semibold leading-none text-white/[0.05]"
+              className="pointer-events-none select-none absolute inset-0 flex items-center justify-center font-semibold leading-none text-black/[0.04]"
               style={{ fontSize: 'clamp(7rem, 20vw, 14rem)' }}
             >
               0{i + 1}
@@ -467,6 +489,36 @@ function Services() {
               <p className="lead text-lg md:text-xl max-w-2xl mx-auto mt-6">{desc}</p>
               <p className="text-text-3 text-sm md:text-base mt-7 tracking-wide">{tags}</p>
             </div>
+          </Reveal>
+        ))}
+      </div>
+    </section>
+  )
+}
+
+// ─── How It Works — quick 4-step overview ───────────────────────────────────────
+function HowItWorks() {
+  const STEPS = [
+    { num: '01', title: 'You share your vision', desc: 'Tell me what you’re building and what’s getting in the way.' },
+    { num: '02', title: 'We design and build',   desc: 'I design and build it, with a staging link at every milestone.' },
+    { num: '03', title: 'You review and approve', desc: 'Click through, request changes, sign off when it feels right.' },
+    { num: '04', title: 'We deploy and launch',  desc: 'We push it live together — then I stay on for support.' },
+  ]
+
+  return (
+    <section id="process" className="py-16 md:py-24 px-6 max-w-5xl mx-auto">
+      <SectionHeader
+        eyebrow="The Flow"
+        title="How It Works"
+        sub="Four simple steps from first message to a site that’s live."
+      />
+
+      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-px bg-line border border-line rounded-3xl overflow-hidden">
+        {STEPS.map(({ num, title, desc }, i) => (
+          <Reveal key={num} delay={i * 80} className="bg-bg p-8 md:p-9 h-full">
+            <div className="headline text-text-3 text-2xl md:text-3xl tabular-nums">{num}</div>
+            <h3 className="headline text-text text-xl md:text-2xl mt-6">{title}</h3>
+            <p className="lead text-base mt-3">{desc}</p>
           </Reveal>
         ))}
       </div>
@@ -603,41 +655,59 @@ function Portfolio() {
   )
 }
 
-// ─── Process ────────────────────────────────────────────────────────────────────
-function Process() {
-  const STEPS = [
+// ─── Why Delvox — benefit cards with single-weight line icons ────────────────────
+const BenefitIcon = ({ path }) => (
+  <svg
+    viewBox="0 0 24 24" fill="none" stroke="currentColor"
+    strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"
+    className="h-7 w-7 text-text" aria-hidden="true"
+  >
+    {path}
+  </svg>
+)
+
+function WhyDelvox() {
+  const BENEFITS = [
     {
-      num: '01', title: 'Consult',
-      desc: "We spend 30–60 minutes figuring out what you actually need — not what sounds impressive. I'll tell you honestly if AI is the right fit, or if the simpler thing is just a better website.",
-      duration: '1–2 days',
+      title: 'Built Fast',
+      desc: 'Most projects ship in days, not months.',
+      icon: <path d="M13 2 L4 14 h7 l-1 8 9-12 h-7 z" />,
     },
     {
-      num: '02', title: 'Build',
-      desc: "I build it. You get a staging link at each milestone. If something's off, we fix it before moving forward. All code lives on GitHub from day one — no black box.",
-      duration: '3–10 days',
+      title: 'Honest Pricing',
+      desc: 'One fixed price, quoted upfront. No retainers.',
+      icon: <><path d="M3 12 L12 3 h6 a3 3 0 0 1 3 3 v6 l-9 9 z" /><circle cx="16.5" cy="7.5" r="1.2" /></>,
     },
     {
-      num: '03', title: 'Deploy',
-      desc: "We push it live together. I walk you through everything, document what I built, and stay reachable for two weeks after handoff. No disappearing act after the last invoice.",
-      duration: '1–2 days',
+      title: 'You Own It All',
+      desc: 'Code lives on your GitHub from day one.',
+      icon: <><path d="M12 3 l7 3 v5 c0 4.5 -3 7.5 -7 9 c-4 -1.5 -7 -4.5 -7 -9 V6 z" /><path d="M9.5 12 l1.8 1.8 L15 9.8" /></>,
+    },
+    {
+      title: 'AI-Native',
+      desc: 'Built on Claude AI — smart where it counts.',
+      icon: <><path d="M12 3 c1 4 2 5 6 6 c-4 1 -5 2 -6 6 c-1 -4 -2 -5 -6 -6 c4 -1 5 -2 6 -6 z" /></>,
     },
   ]
 
   return (
-    <section id="process" className="pt-10 md:pt-12 pb-16 md:pb-24 px-6 max-w-5xl mx-auto">
+    <section id="why-delvox" className="py-16 md:py-24 px-6 max-w-5xl mx-auto">
       <SectionHeader
-        eyebrow="How It Goes"
-        title="How a Project Actually Works"
-        sub="Three phases. You'll know exactly where things stand at every step."
+        eyebrow="Why Delvox"
+        title="What You Actually Get"
+        sub="No jargon, no lock-in, no disappearing act. Just the things that matter."
       />
 
-      <div>
-        {STEPS.map(({ num, title, desc, duration }, i) => (
-          <Reveal key={num} className={`text-center py-12 md:py-16 ${i > 0 ? 'border-t border-line' : ''}`}>
-            <p className="text-text-3 text-base mb-5">{num}</p>
-            <h3 className="headline text-text text-3xl md:text-5xl">{title}</h3>
-            <p className="lead text-lg md:text-xl max-w-2xl mx-auto mt-6">{desc}</p>
-            <p className="text-text-3 text-sm mt-7">{duration}</p>
+      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        {BENEFITS.map(({ title, desc, icon }, i) => (
+          <Reveal
+            key={title}
+            delay={i * 80}
+            className="h-full rounded-2xl border border-line bg-bg p-7 md:p-8 transition-colors duration-300 hover:border-text-3/40"
+          >
+            <BenefitIcon path={icon} />
+            <h3 className="headline text-text text-xl md:text-2xl mt-6">{title}</h3>
+            <p className="lead text-base mt-3">{desc}</p>
           </Reveal>
         ))}
       </div>
@@ -1019,10 +1089,12 @@ export default function App() {
       <div className="bg-bg text-text min-h-screen">
         <Navbar />
         <Hero started={!loading} />
+        <StatsBar />
         <LogoDivider />
         <Services />
+        <HowItWorks />
         <Portfolio />
-        <Process />
+        <WhyDelvox />
         <About />
         <TechStack />
         <FAQ />
