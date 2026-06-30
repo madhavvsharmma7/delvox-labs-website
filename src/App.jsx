@@ -244,10 +244,18 @@ function LoadingScreen({ onDone }) {
 function Navbar() {
   const [open, setOpen] = useState(false)
   const ctaRef = useMagnetic()
-  const nav = ['Services', 'Portfolio', 'Process', 'About', 'FAQ', 'Contact']
+  const nav = [
+    { label: 'Services',  id: 'services' },
+    { label: 'AI Work',   id: 'ai-work' },
+    { label: 'Websites',  id: 'portfolio' },
+    { label: 'Process',   id: 'process' },
+    { label: 'About',     id: 'about' },
+    { label: 'FAQ',       id: 'faq' },
+    { label: 'Contact',   id: 'contact' },
+  ]
 
   const goto = (id) => {
-    smoothTo(id.toLowerCase())
+    smoothTo(id)
     setOpen(false)
   }
 
@@ -263,14 +271,14 @@ function Navbar() {
             <LogoMark className="h-7 w-auto text-text" />
           </button>
 
-          <nav className="hidden md:flex items-center gap-8">
+          <nav className="hidden md:flex items-center gap-5 lg:gap-7">
             {nav.map((n) => (
               <button
-                key={n}
-                onClick={() => goto(n)}
-                className="text-[13px] text-text-2 hover:text-text transition-colors duration-200 cursor-pointer"
+                key={n.id}
+                onClick={() => goto(n.id)}
+                className="text-[13px] text-text-2 hover:text-text transition-colors duration-200 cursor-pointer whitespace-nowrap"
               >
-                {n}
+                {n.label}
               </button>
             ))}
           </nav>
@@ -299,11 +307,11 @@ function Navbar() {
           <div className="md:hidden px-5 pb-5 pt-1 flex flex-col gap-1 border-t border-line">
             {nav.map((n) => (
               <button
-                key={n}
-                onClick={() => goto(n)}
+                key={n.id}
+                onClick={() => goto(n.id)}
                 className="text-left text-[15px] text-text-2 hover:text-text py-2.5 transition-colors cursor-pointer"
               >
-                {n}
+                {n.label}
               </button>
             ))}
             <a
@@ -360,22 +368,26 @@ function Hero({ started }) {
   return (
     <section className="min-h-screen flex flex-col items-center justify-center text-center px-6 pt-28 pb-20">
       <div ref={parallaxRef} className="parallax flex flex-col items-center w-full">
-      <Reveal as="p" className="eyebrow mb-7">Solo dev · AI-first · Building in Public</Reveal>
+      <Reveal as="p" className="eyebrow mb-7">Solo founder · AI automation studio · Building in public</Reveal>
 
       <h1 ref={headlineRef} className="display text-text max-w-5xl">
         <span style={{ fontSize: 'clamp(2.75rem, 8.5vw, 6.5rem)' }} className="block">
-          {['We', 'Build', 'the', 'AI', 'Layer'].map((w, i) => (
+          {['We', 'Build', 'AI', 'That', 'Runs'].map((w, i) => (
             <Fragment key={`a${i}`}><span className="hero-word inline-block">{w}</span>{' '}</Fragment>
           ))}
           <br className="hidden sm:block" />
-          {['for', 'Small', 'Business'].map((w, i) => (
-            <Fragment key={`b${i}`}><span className="hero-word inline-block">{w}</span>{i < 2 ? ' ' : ''}</Fragment>
+          {['Your', 'Business'].map((w, i) => (
+            <Fragment key={`b${i}`}><span className="hero-word inline-block">{w}</span>{i < 1 ? ' ' : ''}</Fragment>
           ))}
         </span>
       </h1>
 
-      <Reveal as="p" delay={160} className="lead text-xl md:text-2xl max-w-2xl mt-8">
-        Websites, automation, and AI agents for small businesses — the kind of work that used to require a whole team. Built on Claude AI, shipped in days, not months.
+      <Reveal as="p" delay={140} className="headline font-normal text-text-3 text-2xl md:text-4xl mt-5">
+        Not just a website for it.
+      </Reveal>
+
+      <Reveal as="p" delay={200} className="lead text-xl md:text-2xl max-w-2xl mt-8">
+        I build AI agents and automation that handle the work small businesses don't have time for. Websites too, when you need one. Everything runs on Claude AI and ships in days.
       </Reveal>
 
       <Reveal delay={240} className="flex flex-wrap items-center justify-center gap-x-8 gap-y-4 mt-11">
@@ -383,31 +395,13 @@ function Hero({ started }) {
           Start a Project
         </a>
         <button
-          onClick={() => smoothTo('portfolio')}
+          onClick={() => smoothTo('ai-work')}
           className="link-blue text-[17px]"
         >
           See the Work&nbsp;›
         </button>
       </Reveal>
 
-      <Reveal delay={320} className="mt-24 w-full max-w-3xl">
-        <div className="hr mb-10" />
-        <div className="flex flex-col sm:flex-row items-stretch justify-center gap-8 sm:gap-0">
-          {[
-            { value: 'FixIt Plumbers', label: 'First Client — Live' },
-            { value: 'Claude AI',      label: 'Core Engine' },
-            { value: 'Open',           label: 'Taking New Work' },
-          ].map(({ value, label }, i) => (
-            <div
-              key={label}
-              className={`flex-1 px-6 ${i > 0 ? 'sm:border-l border-line' : ''}`}
-            >
-              <div className="headline text-text text-2xl md:text-[28px]">{value}</div>
-              <div className="text-text-3 text-sm mt-2">{label}</div>
-            </div>
-          ))}
-        </div>
-      </Reveal>
       </div>
     </section>
   )
@@ -416,9 +410,9 @@ function Hero({ started }) {
 // ─── StatsBar — trust metrics directly below the hero ───────────────────────────
 function StatsBar() {
   const STATS = [
-    { value: '48hr', label: 'Delivery' },
-    { value: '3',    label: 'Live Projects' },
-    { value: '100%', label: 'Satisfaction' },
+    { value: '5',      label: 'Projects Built' },
+    { value: '6 days', label: 'Fastest Build' },
+    { value: '100%',   label: 'You Own the Code' },
   ]
 
   return (
@@ -450,19 +444,19 @@ function SectionHeader({ eyebrow, title, sub }) {
 function Services() {
   const SERVICES = [
     {
+      title: 'AI Agents & Automation',
+      desc: 'Claude AI agents and automations built around how your business actually runs, not a generic chatbot bolted onto a page. They process invoices, qualify leads, handle intake, and start whatever needs to happen next, on their own.',
+      tags: 'Claude AI · Composio · Trigger.dev · Vapi',
+    },
+    {
       title: 'AI-Powered Websites',
-      desc: 'Fast, modern React sites that actually convert — with AI baked in where it counts. Smart contact forms, instant visitor answers, and copy that doesn\'t read like a brochure.',
+      desc: 'Fast, modern React sites that actually convert. Smart contact forms, instant answers for visitors, and copy that doesn\'t read like a brochure.',
       tags: 'React · Claude AI · Tailwind',
     },
     {
-      title: 'Business Automations',
-      desc: 'Python and n8n workflows that handle the tedious stuff — follow-ups, scheduling, form routing, notifications. The work that eats your day, automated in days.',
-      tags: 'Python · n8n · APIs',
-    },
-    {
-      title: 'AI Agents',
-      desc: 'Claude AI agents built around how your business actually runs — not a generic chatbot dropped on a page. They answer questions, qualify leads, and handle intake while you\'re busy.',
-      tags: 'Claude AI · LangChain · Voice',
+      title: 'Custom Integrations',
+      desc: 'Connect the tools you already use. OAuth, APIs, and event-driven pipelines that move data between Gmail, your CRM, your payment processor, and the rest, so nothing has to be copied over by hand.',
+      tags: 'APIs · OAuth · n8n · Webhooks',
     },
   ]
 
@@ -470,8 +464,8 @@ function Services() {
     <section id="services" className="py-16 md:py-24 px-6 max-w-5xl mx-auto">
       <SectionHeader
         eyebrow="What I Build"
-        title="Three Services. No Retainers."
-        sub="Pick what your business needs right now. No upselling, no packages — just the thing that actually solves the problem."
+        title="AI First, Websites Included"
+        sub="Three things, depending on what you need: systems that do the work, a site that brings in customers, or the connections that tie your tools together. No packages and no retainers."
       />
 
       <div>
@@ -496,13 +490,114 @@ function Services() {
   )
 }
 
+// ─── AI Case Studies — proof of the agents/automation work ──────────────────────
+function AICaseStudies() {
+  const CASES = [
+    {
+      title: 'AI Invoice Automation',
+      desc: 'Reads incoming invoices on its own, pulls out the data, generates a branded PDF, and starts whatever needs to happen next. Nobody has to touch it.',
+      stack: ['Claude API', 'Composio', 'Trigger.dev', 'Gmail OAuth'],
+      href: 'https://github.com/madhavvsharmma7/delvox_workspace',
+      linkLabel: 'View on GitHub',
+      icon: (
+        <>
+          <path d="M6 3 h12 v18 l-2 -1.4 -2 1.4 -2 -1.4 -2 1.4 -2 -1.4 -2 1.4 z" />
+          <path d="M9 8 h6" />
+          <path d="M9 12 h6" />
+        </>
+      ),
+    },
+    {
+      title: 'AI Voice Receptionist',
+      desc: 'A voice agent for US dental clinics. It answers inbound calls, books and reschedules appointments, and handles the questions patients ask most, day or night.',
+      stack: ['Vapi', 'Voice AI', 'Scheduling'],
+      icon: (
+        <>
+          <path d="M4 13 v-1 a8 8 0 0 1 16 0 v1" />
+          <rect x="3" y="13" width="3.5" height="6.5" rx="1.2" />
+          <rect x="17.5" y="13" width="3.5" height="6.5" rx="1.2" />
+          <path d="M20.5 19.5 v0.5 a3 3 0 0 1 -3 3 h-3" />
+        </>
+      ),
+    },
+    {
+      title: 'BankFlow — Agentic Onboarding',
+      status: 'In Development',
+      desc: 'An early-stage agentic system for banking customer acquisition and onboarding, built for the SBI Hackathon at Global Fintech Fest 2026.',
+      stack: ['Agentic AI', 'SBI Hackathon', 'GFF 2026'],
+      icon: (
+        <>
+          <path d="M3 9 L12 3 L21 9" />
+          <path d="M4 9 v9 M9 9 v9 M15 9 v9 M20 9 v9" />
+          <path d="M3 21 h18" />
+        </>
+      ),
+    },
+  ]
+
+  return (
+    <section id="ai-work" className="py-16 md:py-24 px-6 max-w-5xl mx-auto">
+      <SectionHeader
+        eyebrow="AI Agents & Automation"
+        title="Systems That Run the Work"
+        sub="Real systems I've built and shipped, not concepts. Here's what each one does."
+      />
+
+      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        {CASES.map(({ title, status, desc, stack, href, linkLabel, icon }, i) => (
+          <Reveal
+            key={title}
+            delay={i * 80}
+            className="h-full flex flex-col rounded-2xl border border-line bg-bg p-7 md:p-8 transition-colors duration-300 hover:border-text-3/40"
+          >
+            <div className="flex items-start justify-between gap-3">
+              <BenefitIcon path={icon} />
+              {status && (
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-line px-2.5 py-1 text-[11px] font-medium text-text-3 whitespace-nowrap">
+                  <span className="inline-block h-1.5 w-1.5 rounded-full bg-blue" />
+                  {status}
+                </span>
+              )}
+            </div>
+
+            <h3 className="headline text-text text-xl md:text-2xl mt-6">{title}</h3>
+            <p className="lead text-base mt-3">{desc}</p>
+
+            <div className="flex flex-wrap gap-2 mt-6">
+              {stack.map((s) => (
+                <span
+                  key={s}
+                  className="inline-flex items-center rounded-full border border-line bg-surface px-2.5 py-1 text-xs text-text-2 whitespace-nowrap"
+                >
+                  {s}
+                </span>
+              ))}
+            </div>
+
+            {href && (
+              <a
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="link-blue text-[15px] mt-auto pt-6 inline-block"
+              >
+                {linkLabel}&nbsp;›
+              </a>
+            )}
+          </Reveal>
+        ))}
+      </div>
+    </section>
+  )
+}
+
 // ─── How It Works — quick 4-step overview ───────────────────────────────────────
 function HowItWorks() {
   const STEPS = [
     { num: '01', title: 'You share your vision', desc: 'Tell me what you’re building and what’s getting in the way.' },
     { num: '02', title: 'We design and build',   desc: 'I design and build it, with a staging link at every milestone.' },
     { num: '03', title: 'You review and approve', desc: 'Click through, request changes, sign off when it feels right.' },
-    { num: '04', title: 'We deploy and launch',  desc: 'We push it live together — then I stay on for support.' },
+    { num: '04', title: 'We deploy and launch',  desc: 'We push it live together, and I stay on afterward for support.' },
   ]
 
   return (
@@ -510,7 +605,7 @@ function HowItWorks() {
       <SectionHeader
         eyebrow="The Flow"
         title="How It Works"
-        sub="Four simple steps from first message to a site that’s live."
+        sub="Four steps from first message to something running in production."
       />
 
       <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-px bg-line border border-line rounded-3xl overflow-hidden">
@@ -566,9 +661,9 @@ function Portfolio() {
     <section id="portfolio" className="pt-16 md:pt-24 pb-0">
       <div className="max-w-5xl mx-auto px-6">
         <SectionHeader
-          eyebrow="Work"
-          title="First Client Out the Door"
-          sub="Two live projects so far. More in the pipeline. This is what Delvox actually ships."
+          eyebrow="Websites"
+          title="Websites We've Built"
+          sub="Alongside the AI work I still build websites. Two are live so far, with more on the way."
         />
       </div>
 
@@ -583,9 +678,9 @@ function Portfolio() {
               className="block w-full rounded-3xl overflow-hidden border border-line cursor-pointer group"
             >
               <img
-                src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&q=80"
-                alt="Sharma Travels website"
-                className="w-full h-64 md:h-96 object-cover transition-transform duration-700 group-hover:scale-[1.02]"
+                src="/work-sharma.jpg"
+                alt="Sharma Travels website — homepage hero"
+                className="w-full h-64 md:h-96 object-cover object-top transition-transform duration-700 group-hover:scale-[1.02]"
                 loading="lazy"
               />
             </a>
@@ -615,16 +710,16 @@ function Portfolio() {
               className="block w-full rounded-3xl overflow-hidden border border-line cursor-pointer group"
             >
               <img
-                src="https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?w=1200&q=80"
-                alt="FixIt Plumbers website"
-                className="w-full h-64 md:h-96 object-cover transition-transform duration-700 group-hover:scale-[1.02]"
+                src="/work-fixit.jpg"
+                alt="FixIt Plumbers website — homepage hero"
+                className="w-full h-64 md:h-96 object-cover object-top transition-transform duration-700 group-hover:scale-[1.02]"
                 loading="lazy"
               />
             </a>
             <p className="eyebrow mt-10">Local Plumbing Company</p>
             <h3 className="headline text-text text-3xl md:text-5xl mt-4">FixIt Plumbers</h3>
             <p className="lead text-lg max-w-2xl mx-auto mt-6">
-              A complete website for a local plumbing company — animated hero, mobile-first layout, and a contact form that routes straight to their inbox. Zero to live in 6 days.
+              A complete website for a local plumbing company: animated hero, mobile-first layout, and a contact form that routes straight to their inbox. Live in six days.
             </p>
             <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3 mt-8">
               <a
@@ -640,10 +735,10 @@ function Portfolio() {
 
           {/* Open slot */}
           <div className="pf-card w-full text-center flex flex-col justify-center">
-            <p className="eyebrow mb-4">Slot #3 — Open</p>
+            <p className="eyebrow mb-4">Slot #3 · Open</p>
             <h3 className="headline text-text text-3xl md:text-5xl">Your Business Here</h3>
             <p className="lead text-lg max-w-2xl mx-auto mt-6">
-              I take on one or two projects at a time so nothing gets rushed. If you're interested, reach out early — slots fill up fast when you charge honest prices.
+              I take on one or two projects at a time so nothing gets rushed. If you're interested, reach out early, since slots fill up fast.
             </p>
             <a href="mailto:madhavs.work07@gmail.com" className="link-blue text-[17px] inline-block mt-8">
               Get in touch&nbsp;›
@@ -685,7 +780,7 @@ function WhyDelvox() {
     },
     {
       title: 'AI-Native',
-      desc: 'Built on Claude AI — smart where it counts.',
+      desc: 'Built on Claude AI, used where it genuinely helps.',
       icon: <><path d="M12 3 c1 4 2 5 6 6 c-4 1 -5 2 -6 6 c-1 -4 -2 -5 -6 -6 c4 -1 5 -2 6 -6 z" /></>,
     },
   ]
@@ -695,7 +790,7 @@ function WhyDelvox() {
       <SectionHeader
         eyebrow="Why Delvox"
         title="What You Actually Get"
-        sub="No jargon, no lock-in, no disappearing act. Just the things that matter."
+        sub="The things that actually matter when you're trusting someone to build this for you."
       />
 
       <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
@@ -740,7 +835,7 @@ function About() {
             I'm Madhav. I started Delvox Labs at 18 because I wanted to build real things that solve real problems, and small businesses kept coming up as the obvious place to do that. Most of them are running on a website that hasn't changed since 2015, a Google Form, and someone manually forwarding emails.
           </p>
           <p className="lead text-lg md:text-xl">
-            My first client was a plumbing company. I built their whole site from scratch in under a week. That proved the model: fast builds, real tooling, honest pricing. I'm doing this in public, sharing every project, every lesson, every misstep, because I think the best way to grow is to just ship things and talk about it.
+            My first client was a plumbing company. I built their whole site from scratch in under a week, and that was proof enough to keep going. I'm doing this in public and sharing what I learn along the way, because I think the fastest way to get good at something is to ship real work and be honest about how it went.
           </p>
         </Reveal>
 
@@ -769,7 +864,7 @@ function TechStack() {
       <SectionHeader
         eyebrow="The Stack"
         title="Tools I Actually Use"
-        sub="No bloated frameworks picked for the résumé. Every tool here earned its place in the last few months of shipping real projects."
+        sub="Nothing here is on the list to pad a résumé. These are the tools I actually reach for on real projects."
       />
 
       <Reveal>
@@ -790,17 +885,6 @@ function TechStack() {
         </div>
       </Reveal>
 
-      {/* Quiet terminal passage — no window chrome */}
-      <Reveal delay={120} className="max-w-xl mx-auto mt-16">
-        <div className="font-mono text-sm space-y-2 text-left">
-          <p className="text-text-2"><span className="text-blue">❯ </span>node scripts/ship-fixit.js</p>
-          <p className="text-text-3 text-xs pl-4">✓ Building React site...</p>
-          <p className="text-text-3 text-xs pl-4">✓ Running Claude AI on contact form logic...</p>
-          <p className="text-text-3 text-xs pl-4">✓ Deploying to prod...</p>
-          <p className="text-text text-xs pl-4">✓ Done. Client got their site in 6 days.</p>
-          <p className="text-text-2 pt-1"><span className="text-blue">❯ </span><span className="cursor-blink">█</span></p>
-        </div>
-      </Reveal>
     </section>
   )
 }
@@ -842,12 +926,12 @@ function Contact() {
         <SectionHeader
           eyebrow="Start Something"
           title="Got a Project? Let's Talk."
-          sub="No sales calls. Just a quick message about what you're working on — I reply the same day."
+          sub="No sales calls. Send a quick note about what you're working on and I'll reply the same day."
         />
 
         {status === 'sent' ? (
           <Reveal className="text-center py-12">
-            <h3 className="headline text-text text-3xl mb-3">Got it — thanks.</h3>
+            <h3 className="headline text-text text-3xl mb-3">Got it, thanks.</h3>
             <p className="lead text-lg">I'll reply today or first thing tomorrow.</p>
           </Reveal>
         ) : status === 'error' ? (
@@ -884,7 +968,7 @@ function Contact() {
                   rows={4}
                   value={form.message}
                   onChange={set('message')}
-                  placeholder="Describe the problem you're trying to solve. The messier the better — I can figure out the solution."
+                  placeholder="Describe the problem you're trying to solve. The messier the better, I can work out the solution from there."
                   className="field resize-none"
                 />
               </div>
@@ -937,7 +1021,7 @@ function Footer() {
         </div>
         <div className="mt-8 pt-6 border-t border-line flex flex-col md:flex-row items-center justify-between gap-3">
           <p className="text-text-3 text-xs">
-            © {new Date().getFullYear()} Delvox Labs. Built with Claude AI &amp; React.
+            © {new Date().getFullYear()} Delvox Labs. All rights reserved.
           </p>
           <div className="flex items-center gap-6">
             <span className="text-text-3 text-xs cursor-pointer hover:text-text transition-colors">Privacy Policy</span>
@@ -953,7 +1037,7 @@ function Footer() {
 const FAQS = [
   {
     q: 'How much does a project cost?',
-    a: 'Every project is quoted upfront before any work starts — one fixed price for the whole build, no hidden fees and no retainers. The number depends on scope, and we settle it in the first conversation so there are no surprises.',
+    a: 'Every project is quoted upfront before any work starts. One fixed price for the whole build, with no hidden fees and no retainers. The number depends on scope, and we settle it in the first conversation so there are no surprises.',
   },
   {
     q: 'How long does it take?',
@@ -1092,6 +1176,7 @@ export default function App() {
         <StatsBar />
         <LogoDivider />
         <Services />
+        <AICaseStudies />
         <HowItWorks />
         <Portfolio />
         <WhyDelvox />
