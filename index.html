@@ -7,25 +7,42 @@
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Delvox Labs builds AI agents and workflow automation for small businesses, plus the websites to go with them. Built on Claude AI and shipped in days. No retainers, you own the code." />
-    <meta name="theme-color" content="#ffffff" />
+    <meta name="description" content="Delvox Labs is an AI receptionist for Indian businesses. When you can't pick up, our AI answers, texts the customer back on WhatsApp, and captures the lead. In seconds, day or night. 14-day free trial, no card required." />
+    <meta name="theme-color" id="theme-color" content="#F4F6F3" />
     <link rel="canonical" href="https://delvoxlabs.vercel.app/" />
-    <title>Delvox Labs | AI Agents & Automation for Small Business</title>
+    <title>Delvox Labs · Never Miss a Customer Call Again | AI Receptionist</title>
+
+    <!-- Set theme before first paint: localStorage wins, then system preference -->
+    <script>
+      (function () {
+        try {
+          var stored = localStorage.getItem('delvox-theme');
+          var dark = stored
+            ? stored === 'dark'
+            : window.matchMedia('(prefers-color-scheme: dark)').matches;
+          if (dark) document.documentElement.classList.add('dark');
+          var meta = document.getElementById('theme-color');
+          if (meta) meta.setAttribute('content', dark ? '#0C1712' : '#F4F6F3');
+        } catch (e) {}
+      })();
+    </script>
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Delvox Labs" />
-    <meta property="og:title" content="Delvox Labs | AI Agents & Automation for Small Business" />
-    <meta property="og:description" content="AI agents and workflow automation for small businesses, plus the websites to go with them. Built on Claude AI and shipped in days. No retainers, you own the code." />
+    <meta property="og:title" content="Delvox Labs · Never Miss a Customer Call Again" />
+    <meta property="og:description" content="When you can't pick up, Delvox's AI answers, texts the customer back on WhatsApp, and captures the lead. In seconds, day or night. 14-day free trial, no card required." />
     <meta property="og:url" content="https://delvoxlabs.vercel.app/" />
-    <meta property="og:image" content="https://delvoxlabs.vercel.app/DelvoxLabsNewLogo.png" />
+    <meta property="og:image" content="https://delvoxlabs.vercel.app/og.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Delvox Labs. Never miss a customer call again. AI receptionist, WhatsApp lead capture, 14-day free trial." />
 
     <!-- Twitter / X -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Delvox Labs | AI Agents & Automation for Small Business" />
-    <meta name="twitter:description" content="AI agents and workflow automation for small businesses, plus the websites to go with them. Built on Claude AI and shipped in days." />
-    <meta name="twitter:image" content="https://delvoxlabs.vercel.app/DelvoxLabsNewLogo.png" />
-    <meta name="twitter:creator" content="@madhavvsharmma" />
+    <meta name="twitter:title" content="Delvox Labs · Never Miss a Customer Call Again" />
+    <meta name="twitter:description" content="When you can't pick up, Delvox's AI answers, texts the customer back on WhatsApp, and captures the lead. In seconds, day or night." />
+    <meta name="twitter:image" content="https://delvoxlabs.vercel.app/og.png" />
 
     <!-- Structured data: Organization -->
     <script type="application/ld+json">
@@ -35,13 +52,9 @@
       "name": "Delvox Labs",
       "url": "https://delvoxlabs.vercel.app/",
       "logo": "https://delvoxlabs.vercel.app/DelvoxLabsNewLogo.png",
-      "description": "AI agents and workflow automation for small businesses, plus the websites to go with them. Built on Claude AI.",
-      "email": "madhavs.work07@gmail.com",
-      "founder": { "@type": "Person", "name": "Madhav Sharma" },
-      "sameAs": [
-        "https://github.com/madhavvsharmma7",
-        "https://x.com/madhavvsharmma"
-      ]
+      "description": "AI receptionist for Indian businesses. When you can't pick up, Delvox's AI answers, texts the customer back on WhatsApp, and captures the lead.",
+      "email": "info@delvoxlabs.com",
+      "founder": { "@type": "Person", "name": "Madhav Sharma" }
     }
     </script>
 
@@ -51,12 +64,12 @@
       "@context": "https://schema.org",
       "@type": "FAQPage",
       "mainEntity": [
-        { "@type": "Question", "name": "How much does a project cost?", "acceptedAnswer": { "@type": "Answer", "text": "Every project is quoted upfront before any work starts. One fixed price for the whole build, with no hidden fees and no retainers. The number depends on scope, and we settle it in the first conversation so there are no surprises." } },
-        { "@type": "Question", "name": "How long does it take?", "acceptedAnswer": { "@type": "Answer", "text": "Most builds ship in days to two weeks. FixIt Plumbers went from first conversation to a live, indexed site in six days. The timeline is agreed before starting, and you get a staging link at every milestone." } },
-        { "@type": "Question", "name": "Do I own everything when it's done?", "acceptedAnswer": { "@type": "Answer", "text": "Yes, completely. All the code lives on your GitHub and your accounts from day one. No lock-in and nothing held hostage." } },
-        { "@type": "Question", "name": "I'm not technical. Is that a problem?", "acceptedAnswer": { "@type": "Answer", "text": "Not at all. You get plain-language updates, a staging link to click through at each milestone, and a full walkthrough at handoff. You never have to touch code or jargon." } },
-        { "@type": "Question", "name": "What happens if something breaks after launch?", "acceptedAnswer": { "@type": "Answer", "text": "Every build includes two weeks of post-launch support, so I stay reachable to fix anything that comes up. After that I'm still an email away for changes." } },
-        { "@type": "Question", "name": "Is this just AI and templates?", "acceptedAnswer": { "@type": "Answer", "text": "No. Every site is a custom React build written for your business, not a template or page builder. AI is a tool I use to ship faster and smarter; it is not the product." } }
+        { "@type": "Question", "name": "How does Delvox answer calls I miss?", "acceptedAnswer": { "@type": "Answer", "text": "When a call goes unanswered, Delvox's AI responds within seconds. It texts the caller back on WhatsApp, answers their questions, and captures their details as a lead. If they want an appointment, it books one." } },
+        { "@type": "Question", "name": "Do I need a new phone number or hardware?", "acceptedAnswer": { "@type": "Answer", "text": "No. Delvox works with your existing business number. Setup happens remotely. There is nothing to install at your shop or clinic." } },
+        { "@type": "Question", "name": "What happens after the 14-day free trial?", "acceptedAnswer": { "@type": "Answer", "text": "If it's working for you, you pick a plan and the monthly subscription plus a one-time setup fee begins. If not, you walk away. No card is required for the trial, so there is nothing to cancel." } },
+        { "@type": "Question", "name": "Does it speak Hindi or my customers' language?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Delvox handles conversations in English, Hindi, and other Indian languages, so customers can reply in whatever language they are comfortable with." } },
+        { "@type": "Question", "name": "Who owns the leads and the data?", "acceptedAnswer": { "@type": "Answer", "text": "You do. Every lead, message, and conversation belongs to your business. If you ever leave, your data goes with you." } },
+        { "@type": "Question", "name": "How long does setup take?", "acceptedAnswer": { "@type": "Answer", "text": "Most businesses are live within a few days. We configure the AI around your services, hours, and common questions, test it with you, and switch it on." } }
       ]
     }
     </script>
@@ -64,7 +77,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700&family=Hanken+Grotesk:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap"
       rel="stylesheet"
     />
   </head>

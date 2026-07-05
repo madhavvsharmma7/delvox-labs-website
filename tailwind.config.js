@@ -1,26 +1,26 @@
 /** @type {import('tailwindcss').Config} */
 export default {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
+  darkMode: 'class',
   theme: {
     extend: {
       colors: {
-        // Apple-style light minimalism
-        bg:       '#FFFFFF',
-        'bg-2':   '#F5F5F7',
-        text:     '#1D1D1F',
-        'text-2': '#6E6E73',
-        'text-3': '#86868B',
-        line:     'rgba(0,0,0,0.12)',
-        surface:  'rgba(0,0,0,0.035)',
-        blue:     '#0066CC',
-        'blue-btn': '#0071E3',
+        // "After hours" tokens — values live in CSS variables (:root / html.dark)
+        paper:      'rgb(var(--paper-rgb) / <alpha-value>)',
+        ink:        'rgb(var(--ink-rgb) / <alpha-value>)',
+        'ink-2':    'var(--ink-2)',
+        'ink-3':    'var(--ink-3)',
+        emerald:    'rgb(var(--emerald-rgb) / <alpha-value>)',
+        honey:      'rgb(var(--honey-rgb) / <alpha-value>)',
+        wa:         'rgb(var(--wa-rgb) / <alpha-value>)',
+        surface:    'var(--surface)',
+        'surface-2': 'var(--surface-2)',
+        line:       'var(--line)',
       },
       fontFamily: {
-        sans: [
-          '-apple-system', 'BlinkMacSystemFont', '"SF Pro Display"',
-          '"SF Pro Text"', '"Helvetica Neue"', 'Inter', 'system-ui', 'sans-serif',
-        ],
-        mono: ['ui-monospace', '"SF Mono"', '"JetBrains Mono"', 'monospace'],
+        sans:    ['"Hanken Grotesk"', 'system-ui', 'sans-serif'],
+        display: ['"Bricolage Grotesque"', '"Hanken Grotesk"', 'system-ui', 'sans-serif'],
+        mono:    ['"Geist Mono"', 'ui-monospace', '"SF Mono"', 'monospace'],
       },
     },
   },
