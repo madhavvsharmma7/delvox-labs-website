@@ -41,8 +41,8 @@ export default function Privacy() {
 
       <h2>Form submissions</h2>
       <p>
-        Forms on this website are delivered via Formspree, a third-party form processing service.
-        Your submission is transmitted to Formspree and forwarded to our inbox. Formspree's own
+        Form submissions are delivered to our inbox by email through Resend, a third-party email
+        service. If you provide an email address, we also send you a confirmation. Resend's own
         privacy policy applies to that processing.
       </p>
 

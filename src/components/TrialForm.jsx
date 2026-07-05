@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { Reveal, SectionHeader } from '../lib/motion.jsx'
 
-const FORMSPREE_URL = 'https://formspree.io/f/mgobnbrg'
 const CONTACT_EMAIL = 'info@delvoxlabs.com'
 
 export default function TrialForm() {
@@ -23,23 +22,17 @@ export default function TrialForm() {
   const submit = async (e) => {
     e.preventDefault()
     setStatus('sending')
-    const looksLikeEmail = form.contact.includes('@')
-    const payload = {
-      name: form.name,
-      business_type: form.business,
-      contact: form.contact,
-      message: form.message,
-      plan: plan || 'Not selected',
-      _subject: isCustom
-        ? `Custom enquiry · ${form.name} (Delvox Labs)`
-        : `Trial request · ${plan || 'General'} · ${form.name} (Delvox Labs)`,
-    }
-    if (looksLikeEmail) payload._replyto = form.contact
     try {
-      const res = await fetch(FORMSPREE_URL, {
+      const res = await fetch('/api/contact', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify(payload),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: form.name,
+          business: form.business,
+          contact: form.contact,
+          message: form.message,
+          plan: isCustom ? 'Custom' : plan,
+        }),
       })
       setStatus(res.ok ? 'sent' : 'error')
     } catch {
@@ -64,12 +57,12 @@ export default function TrialForm() {
               </svg>
             </span>
             <h3 className="headline text-ink text-3xl mb-3">You're in.</h3>
-            <p className="lead text-lg">We'll reach out within a day to set up your trial. Keep an eye on your phone, fittingly.</p>
+            <p className="lead text-lg">We'll be in touch within 24 hours to set up your free trial.</p>
           </Reveal>
         ) : status === 'error' ? (
           <Reveal className="text-center py-12">
             <h3 className="headline text-ink text-3xl mb-3">Something went wrong.</h3>
-            <p className="lead text-lg mb-6">The form couldn't send. Email us directly instead:</p>
+            <p className="lead text-lg mb-6">Email us directly and we'll sort it out:</p>
             <a href={`mailto:${CONTACT_EMAIL}`} className="link-accent text-[17px]">{CONTACT_EMAIL}&nbsp;&rsaquo;</a>
             <button onClick={() => setStatus('idle')} className="block mx-auto mt-6 link-accent text-sm cursor-pointer">
               &lsaquo;&nbsp;Try again
