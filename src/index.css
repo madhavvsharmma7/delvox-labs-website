@@ -431,6 +431,35 @@ html.dark .stat-honey { color: var(--honey); }
   transform-origin: bottom right;
 }
 
+/* Equalizer bars (multilingual voice demo) — animate scaleY only, no layout */
+.eq-bars {
+  display: inline-flex;
+  gap: 3px;
+  align-items: flex-end;
+  height: 16px;
+}
+.eq-bars span {
+  width: 3px;
+  height: 100%;
+  border-radius: 2px;
+  background: currentColor;
+  transform: scaleY(0.3);
+  transform-origin: bottom;
+  will-change: transform;
+}
+.eq-bars span:nth-child(2) { transform: scaleY(0.55); }
+.eq-bars span:nth-child(3) { transform: scaleY(0.8); }
+.eq-bars span:nth-child(4) { transform: scaleY(0.45); }
+.eq-bars.live span { animation: eq-bounce 0.9s ease-in-out infinite; }
+.eq-bars.live span:nth-child(2) { animation-delay: 0.14s; }
+.eq-bars.live span:nth-child(3) { animation-delay: 0.28s; }
+.eq-bars.live span:nth-child(4) { animation-delay: 0.42s; }
+.eq-bars.live span:nth-child(5) { animation-delay: 0.56s; }
+@keyframes eq-bounce {
+  0%, 100% { transform: scaleY(0.3); }
+  50% { transform: scaleY(1); }
+}
+
 /* Pulsing status dot (receptionist "calling back" state) */
 @keyframes pulse-dot {
   0%, 100% { opacity: 1; transform: scale(1); }
@@ -497,4 +526,5 @@ html.dark .stat-honey { color: var(--honey); }
   .cursor-dot { display: none; }
   .typing-dots span { animation: none; }
   .pulse-dot { animation: none; }
+  .eq-bars.live span { animation: none; }
 }

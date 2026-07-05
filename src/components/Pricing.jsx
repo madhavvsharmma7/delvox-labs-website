@@ -3,9 +3,9 @@ import { Reveal, SectionHeader, smoothTo } from '../lib/motion.jsx'
 const PLANS = [
   {
     name: 'Starter',
-    price: '₹1,499',
+    price: '₹2,999',
     period: '/mo',
-    setup: '+ ₹2,999 one-time setup',
+    setup: null,
     features: [
       'AI receptionist',
       'Missed-call recovery',
@@ -92,7 +92,7 @@ export default function Pricing() {
               <span className="headline text-ink text-3xl">{price}</span>
               {period && <span className="text-ink-3 text-sm">{period}</span>}
             </div>
-            <p className="font-mono text-[11.5px] text-ink-3 mt-1.5">{setup}</p>
+            {setup && <p className="font-mono text-[11.5px] text-ink-3 mt-1.5">{setup}</p>}
 
             <ul className="mt-6 space-y-2.5 flex-1">
               {features.map((f) => (

@@ -23,6 +23,17 @@ const STEPS = [
   },
 ]
 
+// Explicit 1px dividers (in --line) between cards, correct at every breakpoint:
+// mobile (1 col) = top borders between stacked cards; sm (2×2) = left + top
+// dividers; lg (4-up) = left dividers only. Real borders render reliably where
+// the old gap-px background-bleed could round away at fractional DPRs.
+const DIVIDERS = [
+  '',                                                 // card 0
+  'border-t border-line sm:border-t-0 sm:border-l',   // card 1
+  'border-t border-line lg:border-t-0 lg:border-l',   // card 2
+  'border-t border-line sm:border-l lg:border-t-0',   // card 3
+]
+
 export default function HowItWorks() {
   return (
     <section id="how" className="py-16 md:py-24 px-6 max-w-5xl mx-auto">
@@ -32,9 +43,9 @@ export default function HowItWorks() {
         sub="The whole recovery takes seconds, and it runs every hour you can't."
       />
 
-      <ol className="grid sm:grid-cols-2 lg:grid-cols-4 gap-px bg-line border border-line rounded-3xl overflow-hidden">
+      <ol className="grid sm:grid-cols-2 lg:grid-cols-4 border border-line rounded-3xl overflow-hidden">
         {STEPS.map(({ num, title, desc }, i) => (
-          <Reveal as="li" key={num} delay={i * 80} className="bg-paper p-8 md:p-9 h-full">
+          <Reveal as="li" key={num} delay={i * 80} className={`bg-paper p-8 md:p-9 h-full ${DIVIDERS[i]}`}>
             <div className="font-mono text-emerald text-sm tracking-widest">{num}</div>
             <h3 className="headline text-ink text-xl md:text-2xl mt-5">{title}</h3>
             <p className="lead text-[15px] mt-3">{desc}</p>
