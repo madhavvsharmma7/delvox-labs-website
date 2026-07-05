@@ -9,6 +9,29 @@ const MAX_TURNS = 40 // abuse guard: cap conversation length
 const MAX_CHARS = 2000 // abuse guard: cap per-message size
 const FORMSPREE_URL = 'https://formspree.io/f/mgobnbrg'
 
+// Best-effort in-memory rate limit (per serverless instance): protects the
+// Anthropic spend from abuse. A durable store (Vercel KV) would make it global.
+const RATE_WINDOW = 60 * 60 * 1000
+const RATE_MAX = 40
+const rateHits = new Map()
+function rateLimited(ip) {
+  const now = Date.now()
+  if (rateHits.size > 5000) rateHits.clear()
+  const recent = (rateHits.get(ip) || []).filter((t) => now - t < RATE_WINDOW)
+  if (recent.length >= RATE_MAX) {
+    rateHits.set(ip, recent)
+    return true
+  }
+  recent.push(now)
+  rateHits.set(ip, recent)
+  return false
+}
+function clientIp(req) {
+  const xff = req.headers['x-forwarded-for']
+  if (typeof xff === 'string' && xff.length) return xff.split(',')[0].trim()
+  return req.headers['x-real-ip'] || 'unknown'
+}
+
 const SYSTEM = `You are the Delvox Labs assistant, chatting with visitors on the Delvox Labs website.
 
 About Delvox Labs: Delvox helps Indian small businesses never miss a customer call. Its AI receptionist answers missed calls, texts customers back on WhatsApp, books appointments, and captures leads automatically. The site has three product demos visitors can try: SBI Mitra, the AI Voice Receptionist, and Invoice Automation — you may mention them at a high level but don't invent details about them.
@@ -109,6 +132,10 @@ export default async function handler(req, res) {
   const { messages } = req.body ?? {}
   if (!isValidHistory(messages)) {
     return res.status(400).json({ error: 'Invalid messages payload' })
+  }
+
+  if (rateLimited(clientIp(req))) {
+    return res.status(429).json({ error: 'Rate limit exceeded' })
   }
 
   try {

@@ -4,19 +4,43 @@
 // Node globals (process) are declared for this dir in eslint.config.js.
 import { Resend } from 'resend'
 
-// Who receives the lead, and the verified sender.
-// RESEND_FROM should be a verified delvoxlabs.com address once the domain is
-// verified in Resend (e.g. "Delvox Labs <noreply@delvoxlabs.com>"). Until then
-// the shared onboarding sender only delivers to your own Resend account email.
 const TO = process.env.CONTACT_TO || 'info@delvoxlabs.com'
 const FROM = process.env.RESEND_FROM || 'Delvox Labs <onboarding@resend.dev>'
 
-const clean = (v, max = 300) => String(v ?? '').trim().slice(0, max)
+// Single-line fields: strip CR/LF/tabs (blocks header-style injection) and cap.
+const cleanLine = (v, max) => String(v ?? '').replace(/[\r\n\t]+/g, ' ').trim().slice(0, max)
+const cleanText = (v, max) => String(v ?? '').trim().slice(0, max)
 const isEmail = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(v).trim())
+const isPhone = (v) => String(v).replace(/\D/g, '').length >= 10
 const escapeHtml = (s) =>
   String(s).replace(/[&<>"']/g, (c) => (
     { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]
   ))
+
+// Best-effort in-memory rate limit: max 3 submissions per IP per hour.
+// Per-instance only (Vercel serverless instances aren't shared) — a durable
+// store (Vercel KV / Upstash) would make it global; this blunts casual abuse.
+const RATE_WINDOW = 60 * 60 * 1000
+const RATE_MAX = 3
+const hits = new Map()
+function rateLimited(ip) {
+  const now = Date.now()
+  if (hits.size > 5000) hits.clear() // crude memory guard against unbounded growth
+  const recent = (hits.get(ip) || []).filter((t) => now - t < RATE_WINDOW)
+  if (recent.length >= RATE_MAX) {
+    hits.set(ip, recent)
+    return true
+  }
+  recent.push(now)
+  hits.set(ip, recent)
+  return false
+}
+
+function clientIp(req) {
+  const xff = req.headers['x-forwarded-for']
+  if (typeof xff === 'string' && xff.length) return xff.split(',')[0].trim()
+  return req.headers['x-real-ip'] || 'unknown'
+}
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -25,14 +49,25 @@ export default async function handler(req, res) {
   }
 
   const body = req.body ?? {}
-  const name = clean(body.name)
-  const business = clean(body.business || body.business_type)
-  const contact = clean(body.contact)
-  const message = clean(body.message, 4000)
-  const plan = clean(body.plan, 60)
 
-  if (!name || !business || !contact) {
-    return res.status(400).json({ error: 'Missing required fields' })
+  // Honeypot: real users never fill "website". Pretend success, send nothing.
+  if (cleanLine(body.website, 100)) {
+    return res.status(200).json({ ok: true })
+  }
+
+  const name = cleanLine(body.name, 60)
+  const business = cleanLine(body.business || body.business_type, 80)
+  const contact = cleanLine(body.contact, 100)
+  const message = cleanText(body.message, 500)
+  const plan = cleanLine(body.plan, 60)
+
+  if (!name || !business || !(isEmail(contact) || isPhone(contact))) {
+    return res.status(400).json({ error: 'Missing or invalid fields' })
+  }
+
+  // Rate limit: max 3 per IP per hour.
+  if (rateLimited(clientIp(req))) {
+    return res.status(429).json({ error: 'Too many attempts' })
   }
 
   if (!process.env.RESEND_API_KEY) {
