@@ -7,16 +7,41 @@ import { smoothTo } from '../lib/motion.jsx'
 export default function MobileCTA() {
   const [show, setShow] = useState(false)
 
+  // IntersectionObserver instead of a scroll listener — callbacks fire only at
+  // threshold crossings, off the scroll hot path (no getBoundingClientRect /
+  // layout read per frame). Show once the hero has scrolled away, hide again
+  // when the trial form nears the viewport.
   useEffect(() => {
-    const onScroll = () => {
-      const past = window.scrollY > window.innerHeight * 0.9
-      const trial = document.getElementById('trial')
-      const nearTrial = trial && trial.getBoundingClientRect().top < window.innerHeight * 0.9
-      setShow(past && !nearTrial)
+    const hero = document.querySelector('main section')
+    const trial = document.getElementById('trial')
+    let pastHero = false
+    let nearTrial = false
+    const update = () => setShow(pastHero && !nearTrial)
+
+    const observers = []
+    if (hero) {
+      const o = new IntersectionObserver(
+        ([e]) => {
+          pastHero = !e.isIntersecting
+          update()
+        },
+        { threshold: 0 }
+      )
+      o.observe(hero)
+      observers.push(o)
     }
-    window.addEventListener('scroll', onScroll, { passive: true })
-    onScroll()
-    return () => window.removeEventListener('scroll', onScroll)
+    if (trial) {
+      const o = new IntersectionObserver(
+        ([e]) => {
+          nearTrial = e.isIntersecting
+          update()
+        },
+        { rootMargin: '0px 0px -15% 0px' }
+      )
+      o.observe(trial)
+      observers.push(o)
+    }
+    return () => observers.forEach((o) => o.disconnect())
   }, [])
 
   return (
