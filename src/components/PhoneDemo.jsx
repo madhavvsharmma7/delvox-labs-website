@@ -28,6 +28,7 @@ function PhoneIcon({ className, slashed = false }) {
 }
 
 export default function PhoneDemo() {
+  const rootRef = useRef(null)
   const glowRef = useRef(null)
   const ringRef = useRef(null)
   const incomingRef = useRef(null)
@@ -64,7 +65,10 @@ export default function PhoneDemo() {
       return
     }
     setInitial()
-    const tl = gsap.timeline({ delay: 0.7, onComplete: () => setDone(true) })
+    // Built paused and started only when the phone is actually on screen, so
+    // the ~8s sequence never burns frames while scrolled past (e.g. on a slow
+    // load or a deep link further down the page).
+    const tl = gsap.timeline({ delay: 0.7, paused: true, onComplete: () => setDone(true) })
 
     // 1–2. Night home screen → incoming call, honey glow pulses
     tl.to(glowRef.current, { opacity: 1, scale: 1, duration: 0.5, ease: 'power2.out' }, 0)
@@ -92,7 +96,23 @@ export default function PhoneDemo() {
     tl.fromTo(leadRef.current, { autoAlpha: 0, scale: 0.85, y: 16 }, { autoAlpha: 1, scale: 1, y: 0, duration: 0.5, ease: 'back.out(1.6)' }, 7.15)
 
     tlRef.current = tl
-    return () => tl.kill()
+
+    // Play once the phone enters the viewport; if it's already visible on load
+    // this fires immediately. Disconnect after the first play so replay is
+    // driven only by the button.
+    const el = rootRef.current
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          tl.play()
+          io.disconnect()
+        }
+      },
+      { threshold: 0.25 }
+    )
+    io.observe(el)
+
+    return () => { io.disconnect(); tl.kill() }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -104,7 +124,7 @@ export default function PhoneDemo() {
   }
 
   return (
-    <div className="flex flex-col items-center">
+    <div ref={rootRef} className="flex flex-col items-center">
       <div
         className="relative"
         role="img"

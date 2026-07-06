@@ -23,7 +23,10 @@
   --surface: #FFFFFF;
   --surface-2: #EAEFE9;
   --line: #DCE3DD;
-  --nav-bg: rgba(244, 246, 243, 0.72);
+  /* Near-opaque so the navbar reads cleanly WITHOUT backdrop-filter blur
+     (blur on a fixed bar re-composites the viewport every scroll frame —
+     the #1 scroll-jank source on integrated GPUs). */
+  --nav-bg: rgba(244, 246, 243, 0.94);
 }
 
 html.dark {
@@ -38,7 +41,7 @@ html.dark {
   --surface: #12211A;
   --surface-2: #16281F;
   --line: rgba(255, 255, 255, 0.10);
-  --nav-bg: rgba(12, 23, 18, 0.66);
+  --nav-bg: rgba(12, 23, 18, 0.92);
 }
 
 * {
@@ -161,11 +164,13 @@ main:focus-visible {
   font-size: 0.8rem;
 }
 
-/* ── Frosted-glass navbar ────────────────────────────────────────────── */
+/* ── Navbar surface ──────────────────────────────────────────────────────
+   Intentionally NO backdrop-filter: blur() — on a fixed element it forces the
+   browser to re-blur everything scrolling behind it on every frame, which is
+   the dominant scroll-jank cause on laptops with integrated graphics. The
+   near-opaque --nav-bg gives the same clean, layered look for free. */
 .nav-glass {
   background: var(--nav-bg);
-  -webkit-backdrop-filter: saturate(150%) blur(12px);
-  backdrop-filter: saturate(150%) blur(12px);
   border: 1px solid var(--line);
   box-shadow: 0 1px 12px rgba(0, 0, 0, 0.05);
 }
@@ -313,7 +318,10 @@ html.dark .stat-honey { color: var(--honey); }
   transform: translateY(30px);
   transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
     transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
-  will-change: opacity, transform;
+  /* No permanent will-change: this class is on dozens of elements site-wide,
+     and a persistent will-change pins a GPU layer for each one forever (memory
+     + compositor overhead). The reveal is a one-time transition, so let the
+     browser promote it only while it actually animates. */
 }
 .reveal.is-visible {
   opacity: 1;
@@ -445,8 +453,9 @@ html.dark .stat-honey { color: var(--honey); }
   background: currentColor;
   transform: scaleY(0.3);
   transform-origin: bottom;
-  will-change: transform;
 }
+/* Promote to a GPU layer only while the bars are actually animating */
+.eq-bars.live span { will-change: transform; }
 .eq-bars span:nth-child(2) { transform: scaleY(0.55); }
 .eq-bars span:nth-child(3) { transform: scaleY(0.8); }
 .eq-bars span:nth-child(4) { transform: scaleY(0.45); }
