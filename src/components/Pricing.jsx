@@ -20,7 +20,7 @@ const PLANS = [
     name: 'Pro',
     price: '₹9,999',
     period: '/mo',
-    setup: '+ ₹4,499 setup',
+    setup: '+ ₹4,499 one-time setup',
     features: [
       'Everything in Starter',
       'Review requests',
