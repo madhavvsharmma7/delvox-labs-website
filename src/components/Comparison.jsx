@@ -47,6 +47,13 @@ export default function Comparison() {
 
       <Reveal
         className="overflow-x-auto rounded-3xl border border-line bg-surface"
+        // contain: layout isolates the table's internal layout so its reveal
+        // (and horizontal scroll) can't trigger layout recalcs on the rest of
+        // the page. will-change: transform pre-promotes it to its own GPU layer
+        // so the fade/slide-in composites smoothly as the section scrolls in.
+        // (This is a single, bounded element — the correct scoped use of
+        // will-change, unlike a blanket rule on every .reveal.)
+        style={{ contain: 'layout', willChange: 'transform' }}
         tabIndex={0}
         role="region"
         aria-label="Comparison table, scrolls horizontally on small screens"
