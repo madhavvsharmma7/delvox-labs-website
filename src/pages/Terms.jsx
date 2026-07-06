@@ -31,7 +31,7 @@ export default function Terms() {
       <h2>3. Billing</h2>
       <ul>
         <li>Paid plans are billed as a monthly recurring subscription at the price of your chosen plan.</li>
-        <li>A one-time setup fee applies and is charged when you activate a paid plan after the trial (Starter ₹2,999; Growth ₹4,999; Pro and Custom as quoted).</li>
+        <li>A one-time setup fee applies and is charged when you activate a paid plan after the trial (Starter ₹2,499; Pro ₹4,499; Custom ₹4,999).</li>
         <li>Prices are in Indian Rupees and exclusive of applicable taxes (such as GST) unless stated otherwise.</li>
         <li>You may cancel at any time; cancellation takes effect at the end of the current billing period. Fees already paid are non-refundable except where required by law.</li>
       </ul>

@@ -2,7 +2,7 @@ import { Reveal, SectionHeader } from '../lib/motion.jsx'
 
 // Cell values: true = yes, false = no, string = plain text
 const ROWS = [
-  { label: 'Monthly cost', delvox: 'From ₹1,499', human: '₹15,000–25,000 approx.', none: 'Free' },
+  { label: 'Monthly cost', delvox: 'From ₹4,999', human: '₹15,000–25,000 approx.', none: 'Free' },
   { label: 'Available 24/7', delvox: true, human: false, none: true },
   { label: 'Answers in seconds', delvox: true, human: true, none: false },
   { label: 'Replies on WhatsApp', delvox: true, human: false, none: false },

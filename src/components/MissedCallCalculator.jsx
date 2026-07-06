@@ -124,7 +124,7 @@ export default function MissedCallCalculator() {
 
           <p className="text-ink text-[15px] leading-relaxed">
             Delvox answers those calls and recovers most of them,{' '}
-            <span className="text-emerald font-medium">from &#8377;1,499/mo</span>.
+            <span className="text-emerald font-medium">from &#8377;4,999/mo</span>.
           </p>
 
           <div className="mt-6">

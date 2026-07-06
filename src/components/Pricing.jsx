@@ -3,28 +3,16 @@ import { Reveal, SectionHeader, smoothTo } from '../lib/motion.jsx'
 const PLANS = [
   {
     name: 'Starter',
-    price: '₹2,999',
+    popular: true,
+    price: '₹4,999',
     period: '/mo',
-    setup: null,
+    setup: '+ ₹2,499 one-time setup',
     features: [
       'AI receptionist',
       'Missed-call recovery',
       'WhatsApp follow-up',
       'Lead capture',
-    ],
-    cta: 'Start free trial',
-  },
-  {
-    name: 'Growth',
-    popular: true,
-    price: '₹4,999',
-    period: '/mo',
-    setup: '+ ₹4,999 one-time setup',
-    features: [
-      'Everything in Starter',
       'Appointment booking',
-      'Review requests',
-      'Monthly performance report',
     ],
     cta: 'Start free trial',
   },
@@ -32,10 +20,12 @@ const PLANS = [
     name: 'Pro',
     price: '₹9,999',
     period: '/mo',
-    setup: '+ custom setup',
+    setup: '+ ₹4,499 setup',
     features: [
-      'Everything in Growth',
+      'Everything in Starter',
+      'Review requests',
       'Custom automations',
+      'Monthly performance report',
       'Priority support',
       'Multi-location',
     ],
@@ -43,9 +33,9 @@ const PLANS = [
   },
   {
     name: 'Custom',
-    price: "Let's talk",
-    period: '',
-    setup: 'Scoped to your business',
+    price: 'Starting from ₹14,999',
+    period: '/mo',
+    setup: '+ ₹4,999 one-time setup',
     features: [
       'Extra AI agents',
       'More services & channels',
@@ -70,7 +60,7 @@ export default function Pricing() {
         sub="Try Delvox on your real missed calls. Pick a plan only once it's earning its keep."
       />
 
-      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 items-stretch">
+      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 items-stretch">
         {PLANS.map(({ name, popular, price, period, setup, features, cta }, i) => (
           <Reveal
             key={name}
@@ -83,7 +73,7 @@ export default function Pricing() {
           >
             {popular && (
               <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-emerald text-white font-mono text-[10px] tracking-widest uppercase px-3 py-1 whitespace-nowrap">
-                Most popular
+                Recommended
               </span>
             )}
 
