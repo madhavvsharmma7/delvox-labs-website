@@ -33,7 +33,8 @@ const PLANS = [
   },
   {
     name: 'Custom',
-    price: 'Starting from ₹14,999',
+    prefix: 'Starting from',
+    price: '₹14,999',
     period: '/mo',
     setup: '+ ₹4,999 one-time setup',
     features: [
@@ -61,7 +62,7 @@ export default function Pricing() {
       />
 
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 items-stretch">
-        {PLANS.map(({ name, popular, price, period, setup, features, cta }, i) => (
+        {PLANS.map(({ name, popular, prefix, price, period, setup, features, cta }, i) => (
           <Reveal
             key={name}
             delay={i * 70}
@@ -78,7 +79,8 @@ export default function Pricing() {
             )}
 
             <h3 className="headline text-ink text-xl">{name}</h3>
-            <div className="mt-4 flex items-baseline gap-1">
+            {prefix && <p className="text-ink-3 text-[12px] mt-4 -mb-1.5">{prefix}</p>}
+            <div className={`${prefix ? 'mt-2' : 'mt-4'} flex items-baseline gap-1`}>
               <span className="headline text-ink text-3xl">{price}</span>
               {period && <span className="text-ink-3 text-sm">{period}</span>}
             </div>
